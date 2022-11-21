@@ -1,1 +1,13 @@
-print(test)
+import json
+
+def meestgespeeld():
+    lst = []
+    bestand = open('steam.json')
+    data = json.load(bestand)
+    for i in data:
+        lst.append(i['name'])
+
+    print(lst[0:5])
+meestgespeeld()
+
+
