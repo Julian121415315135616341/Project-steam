@@ -1,16 +1,72 @@
 import json
+import tkinter
+from tkinter import *
+def steamdata():
 
-def meestgespeeld():
     lst = []
     bestand = open('steam.json')
     data = json.load(bestand)
     for i in data:
         lst.append(i['name'])
+    return 'Eerste 5 spellen' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
+games = str(steamdata())
 
-    print(lst[0:5])
-meestgespeeld()
+def sorteerdspeeltijd():
+    lst = []
+    bestand = open('steam.json')
+    data = json.load(bestand)
+    data = sorted(data, key=lambda i: i['average_playtime'], reverse=True)
+    data = (data[0:6])
+    print(data)
+    for i in data:
+        lst.append(i['name'])
+    return 'Meeste gemiddelde speeltijd' +'\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
+speeltijd = str(sorteerdspeeltijd())
 
-print('League is gay')
-print("hallo123")
-print('123')
-print("iets er achter")
+
+def aantaleigenaars():
+    lst = []
+    bestand = open('steam.json')
+    data = json.load(bestand)
+    data = sorted(data, key=lambda i: i['owners'], reverse=True)
+    data = (data[0:6])
+    print(data)
+    for i in data:
+        lst.append(i['name'])
+    return 'Meeste eigenaars' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
+
+
+
+root = tkinter.Tk()
+root.maxsize=('1200x1000')
+root.title('Dashboard')
+root.config(background='#0C6991')
+dashboard = Frame(root, width=1200, height= 100, bg ='#0C6991')
+dashboard.grid(row=0, column=0, pady=5)
+menubar = Frame(root, width=1200, height= 100.,bg='#0C6991')
+menubar.grid(row=1, column=0, pady=5)
+scherm = Frame(root, width=1200, height=800, bg='#0C6991')
+scherm.grid(row=2, column=0, pady=5)
+hoofdmenu = Label(dashboard, text='Dashboard', bg='#0C6991', font=('Times New Roman', 18))
+hoofdmenu.grid(row=0, column=0)
+optie1 = Label(menubar, text='Optie1', bg='red',font=('Times New Roman', 18), width= 20)
+optie1.grid(row=1, column=0, pady=5)
+optie2 = Label(menubar, text='Optie2', bg='blue',font=('Times New Roman', 18), width= 20)
+optie2.grid(row=1, column=1, pady=5)
+optie3 = Label(menubar, text='Optie3', bg='green',font=('Times New Roman', 18), width= 20)
+optie3.grid(row=1, column=2, pady=5)
+optie4 = Label(menubar, text='Optie4', bg='purple',font=('Times New Roman', 18), width= 20)
+optie4.grid(row=1, column=3, pady=5)
+optie5 = Label(menubar, text='Optie5', bg='orange',font=('Times New Roman', 18), width= 20)
+optie5.grid(row=1, column=4, pady=5)
+optie6 = Label(menubar, text='Optie6', bg='yellow',font=('Times New Roman', 18), width= 20)
+optie6.grid(row=1, column=5, pady=5)
+test1 = Label(scherm, text =games, bg='#0C6991', font=('Times New Roman', 11), width = 20)
+test1.grid(row=2, column=0, pady=5)
+test2 = Label(scherm, text =speeltijd, bg='#0C6991', font=('Times New Roman', 11))
+test2.grid(row=2, column=1, pady=5)
+test3 = Label(scherm, text =aantaleigenaars(), bg='#0C6991', font=('Times New Roman', 11))
+test3.grid(row=2, column=2, pady=5)
+root.mainloop()
+
+
