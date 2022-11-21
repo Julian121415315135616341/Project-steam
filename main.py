@@ -11,4 +11,4 @@ def meestgespeeld():
 meestgespeeld()
 
 
-print("HOLLO")
+print("hallo")
