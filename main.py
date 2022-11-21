@@ -10,3 +10,7 @@ def meestgespeeld():
     print(lst[0:5])
 meestgespeeld()
 
+print('League is gay')
+print("hallo123")
+print('123')
+print("iets er achter")
