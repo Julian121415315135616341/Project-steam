@@ -1,6 +1,9 @@
 import json
 import tkinter
 from tkinter import *
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 def steamdata():
 
     lst = []
@@ -11,30 +14,40 @@ def steamdata():
     return 'Eerste 5 spellen' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
 games = str(steamdata())
 
-def sorteerdspeeltijd():
+def sorteerdavgspeeltijd():
     lst = []
     bestand = open('steam.json')
     data = json.load(bestand)
     data = sorted(data, key=lambda i: i['average_playtime'], reverse=True)
     data = (data[0:6])
-    print(data)
     for i in data:
         lst.append(i['name'])
-    return 'Meeste gemiddelde speeltijd' +'\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
-speeltijd = str(sorteerdspeeltijd())
+    return '5 Spellen met hoogste gemiddelde speeltijd' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
+avgspeeltijd = sorteerdavgspeeltijd()
 
+def sorteerdmediaanspeeltijd():
+    lst = []
+    bestand = open('steam.json')
+    data = json.load(bestand)
+    data = sorted(data, key=lambda i: i['median_playtime'], reverse=True)
+    data = (data[0:6])
+    for i in data:
+        lst.append(i['name'])
+    return data
+mediaanspeeltijd = sorteerdmediaanspeeltijd()
+spd = pd.DataFrame(mediaanspeeltijd)
 
 def aantaleigenaars():
     lst = []
     bestand = open('steam.json')
     data = json.load(bestand)
-    data = sorted(data, key=lambda i: i['owners'], reverse=True)
+    data = sorted(data, key=lambda i: i['median_playtime'], reverse=True)
     data = (data[0:6])
-    print(data)
     for i in data:
         lst.append(i['name'])
+    print(lst)
     return 'Meeste eigenaars' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
-
+aantaleigenaars()
 
 
 root = tkinter.Tk()
@@ -63,10 +76,18 @@ optie6 = Label(menubar, text='Optie6', bg='yellow',font=('Times New Roman', 18),
 optie6.grid(row=1, column=5, pady=5)
 test1 = Label(scherm, text =games, bg='#0C6991', font=('Times New Roman', 11), width = 20)
 test1.grid(row=2, column=0, pady=5)
-test2 = Label(scherm, text =speeltijd, bg='#0C6991', font=('Times New Roman', 11))
+test2 = Label(scherm, text =avgspeeltijd, bg='#0C6991', font=('Times New Roman', 11))
 test2.grid(row=2, column=1, pady=5)
 test3 = Label(scherm, text =aantaleigenaars(), bg='#0C6991', font=('Times New Roman', 11))
 test3.grid(row=2, column=2, pady=5)
+grafiek1 = plt.Figure(figsize = (6, 10), dpi=60)
+ax1 = grafiek1.add_subplot(111)
+bar1 = FigureCanvasTkAgg(grafiek1, scherm)
+bar1.get_tk_widget().grid(row=2, column = 4)
+spd = spd[['name', 'median_playtime']].groupby('name').sum()
+spd.plot(kind='bar', legend=True, ax = ax1)
+ax1.set_title('Spel vs mediaan speeltijd')
+
 root.mainloop()
 
 
