@@ -31,18 +31,22 @@ def gametime(steamid):
             'time': time
         }
         lst.append(dict)
+    print(lst)
     return lst
 
 def test(steamid):
     lst = []
     friends = friendlist(steamid)
     for x in friends:
-        data = (gametime(f'{x}'))
-        for i in data:
+        response = requests.get(
+            f'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={x}&format=json&include_appinfo=1').json()
+        for i in response['response']['games']:
             naam = i['name']
-            time = i['playtime_forever']
-            dict = {'name': naam,
-                    'time': time}
+            time = (i['playtime_forever'])
+            dict = {
+                'name': naam,
+                'time': time
+            }
             lst.append(dict)
     print(lst)
 
