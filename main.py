@@ -31,7 +31,21 @@ def gametime(steamid):
             'time': time
         }
         lst.append(dict)
-    return(lst)
+    return lst
+
+def test(steamid):
+    lst = []
+    friends = friendlist(steamid)
+    for x in friends:
+        data = (gametime(f'{x}'))
+        for i in data:
+            naam = i['name']
+            time = i['playtime_forever']
+            dict = {'name': naam,
+                    'time': time}
+            lst.append(dict)
+    print(lst)
+
 
 def totalgametimeallfriends(steamid):
     totaalgametime = []
@@ -39,7 +53,7 @@ def totalgametimeallfriends(steamid):
     for x in friends:
         totaalgametime.append(gametime(f'{x}'))
     print(totaalgametime)
-totalgametimeallfriends('76561198147947505')
+test('76561198147947505')
 
 def steamdata():
 
