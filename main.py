@@ -20,7 +20,7 @@ def friendlist(steamid):
         lst.append(i['steamid'])
     return lst
 
-def test2(steamid):
+def gametime(steamid):
     lst = []
     response = requests.get(f'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={steamid}&format=json&include_appinfo=1').json()
     for i in response['response']['games']:
@@ -37,7 +37,7 @@ def totalgametimeallfriends(steamid):
     totaalgametime = []
     friends = friendlist(steamid)
     for x in friends:
-        totaalgametime.append(test2(f'{x}'))
+        totaalgametime.append(gametime(f'{x}'))
     print(totaalgametime)
 totalgametimeallfriends('76561198147947505')
 
