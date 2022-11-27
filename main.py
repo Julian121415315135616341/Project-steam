@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import requests
 
+'''steamid voor test: 76561198147947505'''
 def playersummaries(friendid):
     response = requests.get(f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamids={friendid}").json()
     for i in response['response']['players']:
@@ -30,17 +31,16 @@ def test2(steamid):
             'time': time
         }
         lst.append(dict)
-    return lst
-
+    return(lst)
 
 def totalgametimeallfriends(steamid):
     totaalgametime = []
     friends = friendlist(steamid)
-    for i in friends:
-        gametime = test2(i)
-        totaalgametime.append(gametime)
-
+    for x in friends:
+        totaalgametime.append(test2(f'{x}'))
     print(totaalgametime)
+totalgametimeallfriends('76561198147947505')
+
 def steamdata():
 
     lst = []
@@ -72,7 +72,6 @@ def sorteerdmediaanspeeltijd():
         lst.append(i['name'])
     return data
 mediaanspeeltijd = sorteerdmediaanspeeltijd()
-spd = pd.DataFrame(mediaanspeeltijd)
 
 def aantaleigenaars():
     lst = []
@@ -121,6 +120,7 @@ def maindashboard():
     ax1 = grafiek1.add_subplot(111)
     bar1 = FigureCanvasTkAgg(grafiek1, scherm)
     bar1.get_tk_widget().grid(row=2, column = 4)
+    spd = pd.DataFrame(mediaanspeeltijd)
     spd = spd[['name', 'median_playtime']].groupby('name').sum()
     spd.plot(kind='bar', legend=True, ax = ax1)
     ax1.set_title('Spel vs mediaan speeltijd')
