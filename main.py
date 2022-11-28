@@ -9,16 +9,28 @@ import requests
 '''steamid voor test: 76561198147947505'''
 def playersummaries(friendid):
     response = requests.get(f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamids={friendid}").json()
-    for i in response['response']['players']:
-        username = i['personaname']
-        return(username)
+    return response
+
 
 def friendlist(steamid):
     lst =[]
     response = requests.get(f"http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={steamid}&relationship=friend").json()
     for i in response['friendslist']['friends']:
         lst.append(i['steamid'])
-    return(lst)
+    return lst
+def availablefriends(steamid):
+    lst = []
+    friends = friendlist(steamid)
+    for x in friends:
+        data = playersummaries(x)
+        print(data)
+        #if data['response']['players']['communityvisibilitystate'] == 3:
+            #lst.append(x['response']['players']['steamid'])
+        #else:
+            #continue
+
+    return lst
+availablefriends('76561198147947505')
 
 def gametime(steamid):
     lst = []
@@ -31,7 +43,6 @@ def gametime(steamid):
             'time': time
         }
         lst.append(dict)
-    print(lst)
     return lst
 
 def test(steamid):
@@ -48,6 +59,7 @@ def test(steamid):
                 'time': time
             }
             lst.append(dict)
+            continue
     print(lst)
 
 
@@ -56,12 +68,12 @@ def test(steamid):
 def totalgametimeallfriends(steamid):
     totaalgametime = []
     friends = friendlist(steamid)
-    print(friends)
     for x in friends:
-        totaalgametime.append(gametime(f'{x}'))
+        data = gametime(x)
+        totaalgametime.append(data)
     print(totaalgametime)
 
-#totalgametimeallfriends('76561198147947505')
+
 def steamdata():
 
     lst = []
@@ -102,7 +114,6 @@ def aantaleigenaars():
     data = (data[0:6])
     for i in data:
         lst.append(i['name'])
-    print(lst)
     return 'Meeste eigenaars' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
 
 
@@ -321,5 +332,5 @@ def maindashboard():
     test3.grid(row=2, column=2, pady=5)
 
     root.mainloop()
-maindashboard()
+#maindashboard()
 
