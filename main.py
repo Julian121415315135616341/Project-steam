@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import requests
+from collections import Counter
 
 '''steamid voor test: 76561198147947505'''
 def playersummaries(friendid):
@@ -18,19 +19,6 @@ def friendlist(steamid):
     for i in response['friendslist']['friends']:
         lst.append(i['steamid'])
     return lst
-def availablefriends(steamid):
-    lst = []
-    friends = friendlist(steamid)
-    for x in friends:
-        data = playersummaries(x)
-        print(data)
-        #if data['response']['players']['communityvisibilitystate'] == 3:
-            #lst.append(x['response']['players']['steamid'])
-        #else:
-            #continue
-
-    return lst
-availablefriends('76561198147947505')
 
 def gametime(steamid):
     lst = []
@@ -45,33 +33,27 @@ def gametime(steamid):
         lst.append(dict)
     return lst
 
-def test(steamid):
-    lst = []
-    friends = friendlist(steamid)
-    for x in friends:
-        response = requests.get(
-            f'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={x}&format=json&include_appinfo=1').json()
-        for i in response['response']['games']:
-            naam = i['name']
-            time = (i['playtime_forever'])
-            dict = {
-                'name': naam,
-                'time': time
-            }
-            lst.append(dict)
-            continue
-    print(lst)
-
-
-
-
 def totalgametimeallfriends(steamid):
     totaalgametime = []
     friends = friendlist(steamid)
     for x in friends:
-        data = gametime(x)
-        totaalgametime.append(data)
-    print(totaalgametime)
+        try:
+            data = gametime(x)
+            totaalgametime.append(data)
+        except KeyError:
+            continue
+    totalegametime = Counter()
+    for d in totaalgametime:
+        for j in d:
+            totalegametime[j['name']] += j['time']
+    print (totalegametime)
+    return totalegametime
+
+
+
+
+totalgametimeallfriends('76561198147947505')
+
 
 
 def steamdata():
