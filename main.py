@@ -46,15 +46,14 @@ def totalgametimeallfriends(steamid):
     for d in totaalgametime:
         for j in d:
             totalegametime[j['name']] += j['time']
-    print (totalegametime)
+    print(totalegametime)
     return totalegametime
+#print(totalgametimeallfriends('76561198147947505'))
 
-
-
-
-totalgametimeallfriends('76561198147947505')
-
-
+def totaalspeeltijdperspel(steamid):
+    naamgame = str(input('Welke game wilt u speltijd van zien? '))
+    data = totalgametimeallfriends(steamid)
+    print(data[f'{naamgame}'])
 
 def steamdata():
 
