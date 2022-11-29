@@ -20,6 +20,12 @@ def friendlist(steamid):
         lst.append(i['steamid'])
     return lst
 
+def friendsdata(steamid):
+    friends = friendlist(steamid)
+    for i in friends:
+        return(playersummaries(i))
+
+
 def gametime(steamid):
     lst = []
     response = requests.get(f'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={steamid}&format=json&include_appinfo=1').json()
@@ -46,14 +52,14 @@ def totalgametimeallfriends(steamid):
     for d in totaalgametime:
         for j in d:
             totalegametime[j['name']] += j['time']
-    print(totalegametime)
     return totalegametime
 #print(totalgametimeallfriends('76561198147947505'))
 
-def totaalspeeltijdperspel(steamid):
-    naamgame = str(input('Welke game wilt u speltijd van zien? '))
+def totaalspeeltijdperspel():
+    steamid = int(steamidinvoer.get())
+    naamgame = str(gameinvoer.get())
     data = totalgametimeallfriends(steamid)
-    print(data[f'{naamgame}'])
+    return(data[f'{naamgame}'])
 
 def steamdata():
 
@@ -144,6 +150,7 @@ def optie2dashboard():
     root = tkinter.Tk()
     root.maxsize = ('1200x1000')
     root.title('Optie2dashboard')
+    root.state('zoomed')
     root.config(background='#0C6991')
     dashboard = Frame(root, width=1200, height=100, bg='#0C6991')
     dashboard.grid(row=0, column=0, pady=5)
@@ -172,6 +179,14 @@ def optie2dashboard():
     optie5.grid(row=1, column=4, pady=5)
     optie6 = Button(menubar, text='Optie6', bg='yellow', font=('Times New Roman', 18), width=20)
     optie6.grid(row=1, column=5, pady=5)
+    global gameinvoer
+    gameinvoer = Entry(scherm, font=('Times New Roman', 18))
+    gameinvoer.insert(0, 'Welke game wilt u checken?')
+    gameinvoer.grid(row=0, column=0, pady=5)
+    global steamidinvoer
+    steamidinvoer = Entry(scherm, font=('Times New Roman', 18))
+    steamidinvoer.insert(0, 'van welk steamid wilt u totale gametime van vrienden voor de game checken?')
+    steamidinvoer.grid(row=1, column=1, pady=5)
     root.mainloop()
 
 def optie3dashboard():
@@ -313,5 +328,6 @@ def maindashboard():
     test3.grid(row=2, column=2, pady=5)
 
     root.mainloop()
-#maindashboard()
+maindashboard()
+
 
