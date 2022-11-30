@@ -1,11 +1,12 @@
 import json
 import tkinter
 from tkinter import *
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import requests
 from collections import Counter
+
 
 '''steamid voor test: 76561198147947505'''
 def playersummaries(friendid):
@@ -53,13 +54,33 @@ def totalgametimeallfriends(steamid):
         for j in d:
             totalegametime[j['name']] += j['time']
     return totalegametime
-#print(totalgametimeallfriends('76561198147947505'))
 
-def totaalspeeltijdperspel():
-    steamid = int(steamidinvoer.get())
-    naamgame = str(gameinvoer.get())
+def meestgespeeldegames(steamid):
+    gametime = totalgametimeallfriends(steamid)
+    maximaal = sorted(gametime, key=gametime.get, reverse=True)[:5]
+    return maximaal
+
+def meestgespeeldegamestijd(steamid):
+    games = meestgespeeldegames(steamid)
+    lst =[]
+    lst2 = []
     data = totalgametimeallfriends(steamid)
-    return(data[f'{naamgame}'])
+    for i in meestgespeeldegames(steamid):
+        tijd = data[i]
+        lst.append(tijd)
+    for i in lst:
+        time = i
+        for x in games:
+            gamenaam = x
+            dict = {
+            'game': gamenaam,
+            'time': time/60
+                }
+            lst2.append(dict)
+    return lst2
+
+
+#print(meestgespeeldegamestijd('76561198147947505'))
 
 def steamdata():
 
@@ -104,7 +125,50 @@ def aantaleigenaars():
     return 'Meeste eigenaars' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
 
 
+
+def maindashboard():
+    root = tkinter.Tk()
+    root.maxsize=('1200x1000')
+    root.title('Dashboard')
+    root.config(background='#0C6991')
+    dashboard = Frame(root, width=1200, height= 100, bg ='#0C6991')
+    dashboard.grid(row=0, column=0, pady=5)
+    menubar = Frame(root, width=1200, height= 100.,bg='#0C6991')
+    menubar.grid(row=1, column=0, pady=5)
+    scherm = Frame(root, width=1200, height=800, bg='#0C6991')
+    scherm.grid(row=2, column=0, pady=5)
+    hoofdmenu = Label(dashboard, text='Dashboard', bg='#0C6991', font=('Times New Roman', 18))
+    hoofdmenu.grid(row=0, column=0)
+    optie1 = Button(menubar, text='Optie1', bg='red', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), optie1dashboard()])
+    optie1.grid(row=1, column=0, pady=5)
+    optie2 = Button(menubar, text='Optie2', bg='blue', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), optie2dashboard()])
+    optie2.grid(row=1, column=1, pady=5)
+    optie3 = Button(menubar, text='Optie3', bg='green', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), optie3dashboard()])
+    optie3.grid(row=1, column=2, pady=5)
+    optie4 = Button(menubar, text='Optie4', bg='purple', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), optie4dashboard()])
+    optie4.grid(row=1, column=3, pady=5)
+    optie5 = Button(menubar, text='Optie5', bg='orange', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), optie5dashboard()])
+    optie5.grid(row=1, column=4, pady=5)
+    optie6 = Button(menubar, text='Optie6', bg='yellow',font=('Times New Roman', 18), width= 20)
+    optie6.grid(row=1, column=5, pady=5)
+    test1 = Label(scherm, text =games, bg='#0C6991', font=('Times New Roman', 11), width = 20)
+    test1.grid(row=2, column=0, pady=5)
+    test2 = Label(scherm, text =avgspeeltijd, bg='#0C6991', font=('Times New Roman', 11))
+    test2.grid(row=2, column=1, pady=5)
+    test3 = Label(scherm, text =aantaleigenaars(), bg='#0C6991', font=('Times New Roman', 11))
+    test3.grid(row=2, column=2, pady=5)
+
+
+    root.mainloop()
+
 def optie1dashboard():
+    steamid = steamidentry.get()
+    data = meestgespeeldegamestijd(steamid)
     root = tkinter.Tk()
     root.maxsize = ('1200x1000')
     root.title('Optie1dashboard')
@@ -136,14 +200,15 @@ def optie1dashboard():
     optie5.grid(row=1, column=4, pady=5)
     optie6 = Button(menubar, text='Optie6', bg='yellow', font=('Times New Roman', 18), width=20)
     optie6.grid(row=1, column=5, pady=5)
-    grafiek1 = plt.Figure(figsize=(6, 10), dpi=60)
-    ax1 = grafiek1.add_subplot(111)
-    bar1 = FigureCanvasTkAgg(grafiek1, scherm)
-    bar1.get_tk_widget().grid(row=2, column=4)
-    spd = pd.DataFrame(mediaanspeeltijd)
-    spd = spd[['name', 'median_playtime']].groupby('name').sum()
-    spd.plot(kind='bar', legend=True, ax=ax1)
-    ax1.set_title('Spel vs mediaan speeltijd')
+    figure = plt.Figure(figsize=(6, 5), dpi=100)
+    ax = figure.add_subplot(111)
+    chart_type = FigureCanvasTkAgg(figure, scherm)
+    chart_type.get_tk_widget().grid(row=1, column= 4)
+    df = pd.DataFrame(data, columns=['name', 'time'])
+    df = df[df.get(['game', 'time'])].groupby('game').sum()
+    df.plot(kind='bar', legend=True, ax=ax)
+    ax.set_title('Speeltijd van vrienden')
+    ax.set_ylim(ymin=8000)
     root.mainloop()
 
 def optie2dashboard():
@@ -179,14 +244,6 @@ def optie2dashboard():
     optie5.grid(row=1, column=4, pady=5)
     optie6 = Button(menubar, text='Optie6', bg='yellow', font=('Times New Roman', 18), width=20)
     optie6.grid(row=1, column=5, pady=5)
-    global gameinvoer
-    gameinvoer = Entry(scherm, font=('Times New Roman', 18))
-    gameinvoer.insert(0, 'Welke game wilt u checken?')
-    gameinvoer.grid(row=0, column=0, pady=5)
-    global steamidinvoer
-    steamidinvoer = Entry(scherm, font=('Times New Roman', 18))
-    steamidinvoer.insert(0, 'van welk steamid wilt u totale gametime van vrienden voor de game checken?')
-    steamidinvoer.grid(row=1, column=1, pady=5)
     root.mainloop()
 
 def optie3dashboard():
@@ -290,44 +347,15 @@ def optie5dashboard():
     optie6 = Button(menubar, text='Optie6', bg='yellow',font=('Times New Roman', 18), width= 20)
     optie6.grid(row=1, column=5, pady=5)
     root.mainloop()
-def maindashboard():
-    root = tkinter.Tk()
-    root.maxsize=('1200x1000')
-    root.title('Dashboard')
-    root.config(background='#0C6991')
-    dashboard = Frame(root, width=1200, height= 100, bg ='#0C6991')
-    dashboard.grid(row=0, column=0, pady=5)
-    menubar = Frame(root, width=1200, height= 100.,bg='#0C6991')
-    menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=800, bg='#0C6991')
-    scherm.grid(row=2, column=0, pady=5)
-    hoofdmenu = Label(dashboard, text='Dashboard', bg='#0C6991', font=('Times New Roman', 18))
-    hoofdmenu.grid(row=0, column=0)
-    optie1 = Button(menubar, text='Optie1', bg='red', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie1dashboard()])
-    optie1.grid(row=1, column=0, pady=5)
-    optie2 = Button(menubar, text='Optie2', bg='blue', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie2dashboard()])
-    optie2.grid(row=1, column=1, pady=5)
-    optie3 = Button(menubar, text='Optie3', bg='green', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie3dashboard()])
-    optie3.grid(row=1, column=2, pady=5)
-    optie4 = Button(menubar, text='Optie4', bg='purple', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie4dashboard()])
-    optie4.grid(row=1, column=3, pady=5)
-    optie5 = Button(menubar, text='Optie5', bg='orange', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie5dashboard()])
-    optie5.grid(row=1, column=4, pady=5)
-    optie6 = Button(menubar, text='Optie6', bg='yellow',font=('Times New Roman', 18), width= 20)
-    optie6.grid(row=1, column=5, pady=5)
-    test1 = Label(scherm, text =games, bg='#0C6991', font=('Times New Roman', 11), width = 20)
-    test1.grid(row=2, column=0, pady=5)
-    test2 = Label(scherm, text =avgspeeltijd, bg='#0C6991', font=('Times New Roman', 11))
-    test2.grid(row=2, column=1, pady=5)
-    test3 = Label(scherm, text =aantaleigenaars(), bg='#0C6991', font=('Times New Roman', 11))
-    test3.grid(row=2, column=2, pady=5)
 
-    root.mainloop()
-maindashboard()
 
+root = tkinter.Tk()
+root.maxsize= ('400x400')
+label1 = Label(root, text='Steamid:')
+label1.pack()
+steamidentry = Entry(root)
+steamidentry.pack()
+button = Button(root, text='Zie statestieken', command=lambda: [root.iconify(), maindashboard()])
+button.pack()
+root.mainloop()
 
