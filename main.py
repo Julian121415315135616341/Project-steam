@@ -63,24 +63,22 @@ def meestgespeeldegames(steamid):
 def meestgespeeldegamestijd(steamid):
     games = meestgespeeldegames(steamid)
     lst =[]
-    lst2 = []
+    dict = {
+        'game': [],
+        'time': []
+    }
     data = totalgametimeallfriends(steamid)
     for i in meestgespeeldegames(steamid):
         tijd = data[i]
         lst.append(tijd)
     for i in lst:
-        time = i
-        for x in games:
-            gamenaam = x
-            dict = {
-            'game': gamenaam,
-            'time': time/60
-                }
-            lst2.append(dict)
-    return lst2
+        dict['time'].append(i)
+    for x in games:
+        dict['game'].append(x)
+    return dict
 
 
-#print(meestgespeeldegamestijd('76561198147947505'))
+print(meestgespeeldegamestijd('76561198147947505'))
 
 def steamdata():
 
@@ -168,7 +166,8 @@ def maindashboard():
 
 def optie1dashboard():
     steamid = steamidentry.get()
-    data = meestgespeeldegamestijd(steamid)
+    data1 = meestgespeeldegamestijd(steamid)
+    df1 = pd.DataFrame(data1)
     root = tkinter.Tk()
     root.maxsize = ('1200x1000')
     root.title('Optie1dashboard')
@@ -200,15 +199,13 @@ def optie1dashboard():
     optie5.grid(row=1, column=4, pady=5)
     optie6 = Button(menubar, text='Optie6', bg='yellow', font=('Times New Roman', 18), width=20)
     optie6.grid(row=1, column=5, pady=5)
-    figure = plt.Figure(figsize=(6, 5), dpi=100)
-    ax = figure.add_subplot(111)
-    chart_type = FigureCanvasTkAgg(figure, scherm)
-    chart_type.get_tk_widget().grid(row=1, column= 4)
-    df = pd.DataFrame(data, columns=['name', 'time'])
-    df = df[df.get(['game', 'time'])].groupby('game').sum()
-    df.plot(kind='bar', legend=True, ax=ax)
-    ax.set_title('Speeltijd van vrienden')
-    ax.set_ylim(ymin=8000)
+    figure1 = plt.Figure(figsize=(6, 5), dpi=100)
+    ax1 = figure1.add_subplot(111)
+    bar1 = FigureCanvasTkAgg(figure1, scherm)
+    bar1.get_tk_widget().pack(side=tkinter.LEFT, fill=tkinter.BOTH)
+    df1 = df1[['game', 'time']].groupby('game').sum()
+    df1.plot(kind='bar', legend=True, ax=ax1)
+    ax1.set_title('Country Vs. GDP Per Capita')
     root.mainloop()
 
 def optie2dashboard():
