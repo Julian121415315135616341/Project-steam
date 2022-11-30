@@ -168,6 +168,7 @@ def optie1dashboard():
     steamid = steamidentry.get()
     data1 = meestgespeeldegamestijd(steamid)
     df1 = pd.DataFrame(data1)
+    print(df1)
     root = tkinter.Tk()
     root.maxsize = ('1200x1000')
     root.title('Optie1dashboard')
@@ -205,7 +206,7 @@ def optie1dashboard():
     bar1.get_tk_widget().pack(side=tkinter.LEFT, fill=tkinter.BOTH)
     df1 = df1[['game', 'time']].groupby('game').sum()
     df1.plot(kind='bar', legend=True, ax=ax1)
-    ax1.set_title('Country Vs. GDP Per Capita')
+    ax1.set_title('Vrienden speeltijd')
     root.mainloop()
 
 def optie2dashboard():
