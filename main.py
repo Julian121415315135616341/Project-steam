@@ -70,7 +70,7 @@ def meestgespeeldegamestijd(steamid):
     data = totalgametimeallfriends(steamid)
     for i in meestgespeeldegames(steamid):
         tijd = data[i]
-        lst.append(tijd)
+        lst.append(tijd / 60)
     for i in lst:
         dict['time'].append(i)
     for x in games:
@@ -78,7 +78,7 @@ def meestgespeeldegamestijd(steamid):
     return dict
 
 
-print(meestgespeeldegamestijd('76561198147947505'))
+#print(meestgespeeldegamestijd('76561198147947505'))
 
 def steamdata():
 
@@ -168,7 +168,6 @@ def optie1dashboard():
     steamid = steamidentry.get()
     data1 = meestgespeeldegamestijd(steamid)
     df1 = pd.DataFrame(data1)
-    print(df1)
     root = tkinter.Tk()
     root.maxsize = ('1200x1000')
     root.title('Optie1dashboard')
@@ -200,13 +199,14 @@ def optie1dashboard():
     optie5.grid(row=1, column=4, pady=5)
     optie6 = Button(menubar, text='Optie6', bg='yellow', font=('Times New Roman', 18), width=20)
     optie6.grid(row=1, column=5, pady=5)
-    figure1 = plt.Figure(figsize=(6, 5), dpi=100)
+    figure1 = plt.Figure(figsize=(5, 10), dpi=72)
     ax1 = figure1.add_subplot(111)
     bar1 = FigureCanvasTkAgg(figure1, scherm)
     bar1.get_tk_widget().pack(side=tkinter.LEFT, fill=tkinter.BOTH)
     df1 = df1[['game', 'time']].groupby('game').sum()
     df1.plot(kind='bar', legend=True, ax=ax1)
     ax1.set_title('Vrienden speeltijd')
+    figure1.subplots_adjust(bottom=0.2)
     root.mainloop()
 
 def optie2dashboard():
