@@ -88,7 +88,6 @@ def steamdata():
     for i in data:
         lst.append(i['name'])
     return 'Eerste 5 spellen' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
-games = str(steamdata())
 
 def sorteerdavgspeeltijd():
     lst = []
@@ -98,8 +97,7 @@ def sorteerdavgspeeltijd():
     data = (data[0:6])
     for i in data:
         lst.append(i['name'])
-    return '5 Spellen met hoogste gemiddelde speeltijd' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
-avgspeeltijd = sorteerdavgspeeltijd()
+    return '5 Spellen met hoogste gemiddelde speeltijd' '\n'+ '1: '+lst[0] + '\n' + '2: '+lst[1 ] + '\n' + '3: '+lst[2] + '\n' + '4: '+lst[3] +'\n' + '5: '+lst[4]
 
 def sorteerdmediaanspeeltijd():
     lst = []
@@ -109,18 +107,16 @@ def sorteerdmediaanspeeltijd():
     data = (data[0:6])
     for i in data:
         lst.append(i['name'])
-    return data
-mediaanspeeltijd = sorteerdmediaanspeeltijd()
-
-def aantaleigenaars():
+    return 'Spellen met hoogste mediaan speeltijd' '\n'+ '1: '+lst[0] + '\n' + '2: '+lst[1 ] + '\n' + '3: '+lst[2] + '\n' + '4: '+lst[3] +'\n' + '5: '+lst[4]
+def duurstespellen():
     lst = []
     bestand = open('steam.json')
     data = json.load(bestand)
-    data = sorted(data, key=lambda i: i['median_playtime'], reverse=True)
+    data = sorted(data, key=lambda i: i['price'], reverse=True)
     data = (data[0:6])
     for i in data:
         lst.append(i['name'])
-    return 'Meeste eigenaars' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
+    return 'Duurste Spellen' '\n'+ '1: '+lst[0] + '\n' + '2: '+lst[1 ] + '\n' + '3: '+lst[2] + '\n' + '4: '+lst[3] +'\n' + '5: '+lst[4]
 
 
 
@@ -154,14 +150,8 @@ def maindashboard():
     optie5.grid(row=1, column=4, pady=5)
     optie6 = Button(menubar, text='Optie6', bg='yellow',font=('Times New Roman', 18), width= 20)
     optie6.grid(row=1, column=5, pady=5)
-    test1 = Label(scherm, text =games, bg='#0C6991', font=('Times New Roman', 11), width = 20)
+    test1 = Label(scherm, text ='Hoofdscherm', bg='#0C6991', font=('Times New Roman', 11), width = 20)
     test1.grid(row=2, column=0, pady=5)
-    test2 = Label(scherm, text =avgspeeltijd, bg='#0C6991', font=('Times New Roman', 11))
-    test2.grid(row=2, column=1, pady=5)
-    test3 = Label(scherm, text =aantaleigenaars(), bg='#0C6991', font=('Times New Roman', 11))
-    test3.grid(row=2, column=2, pady=5)
-
-
     root.mainloop()
 
 def optie1dashboard():
@@ -242,6 +232,12 @@ def optie2dashboard():
     optie5.grid(row=1, column=4, pady=5)
     optie6 = Button(menubar, text='Optie6', bg='yellow', font=('Times New Roman', 18), width=20)
     optie6.grid(row=1, column=5, pady=5)
+    test1 = Label(scherm, text =sorteerdavgspeeltijd() , bg='#0C6991', font=('Times New Roman', 11), width = 50)
+    test1.grid(row=2, column=0, pady=5)
+    test2 = Label(scherm, text =duurstespellen(), bg='#0C6991', font=('Times New Roman', 11), width=50)
+    test2.grid(row=2, column=1, pady=5)
+    test3 = Label(scherm, text =sorteerdmediaanspeeltijd(), bg='#0C6991', font=('Times New Roman', 11), width=50)
+    test3.grid(row=2, column=2, pady=5)
     root.mainloop()
 
 def optie3dashboard():
