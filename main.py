@@ -348,6 +348,7 @@ def optie5dashboard():
 
 
 root = tkinter.Tk()
+root.title('Steam')
 root.geometry= ('400x400')
 label1 = Label(root, text='Steamid:')
 label1.pack()
