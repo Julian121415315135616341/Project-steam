@@ -122,6 +122,7 @@ def duurstespellen():
 
 def maindashboard():
     root = tkinter.Tk()
+    root.attributes('-fullscreen',True)
     root.maxsize=('1200x1000')
     root.title('Dashboard')
     root.config(background='#0C6991')
@@ -159,6 +160,7 @@ def optie1dashboard():
     data1 = meestgespeeldegamestijd(steamid)
     df1 = pd.DataFrame(data1)
     root = tkinter.Tk()
+    root.attributes('-fullscreen', True)
     root.maxsize = ('1200x1000')
     root.title('Optie1dashboard')
     root.config(background='#0C6991')
@@ -200,6 +202,7 @@ def optie1dashboard():
 
 def optie2dashboard():
     root = tkinter.Tk()
+    root.attributes('-fullscreen', True)
     root.maxsize = ('1200x1000')
     root.title('Optie2dashboard')
     root.state('zoomed')
@@ -241,6 +244,7 @@ def optie2dashboard():
 
 def optie3dashboard():
     root = tkinter.Tk()
+    root.attributes('-fullscreen', True)
     root.maxsize = ('1200x1000')
     root.title('Optie3dashboard')
     root.config(background='#0C6991')
@@ -275,6 +279,7 @@ def optie3dashboard():
 
 def optie4dashboard():
     root = tkinter.Tk()
+    root.attributes('-fullscreen', True)
     root.maxsize = ('1200x1000')
     root.title('Optie4dashboard')
     root.config(background='#0C6991')
@@ -343,7 +348,7 @@ def optie5dashboard():
 
 
 root = tkinter.Tk()
-root.maxsize= ('400x400')
+root.geometry= ('400x400')
 label1 = Label(root, text='Steamid:')
 label1.pack()
 steamidentry = Entry(root)
