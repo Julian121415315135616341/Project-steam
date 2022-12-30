@@ -122,36 +122,28 @@ def duurstespellen():
 
 def maindashboard():
     root = tkinter.Tk()
-    root.attributes('-fullscreen',True)
+    root.attributes('-fullscreen',False)
     root.maxsize=('1200x1000')
     root.title('Dashboard')
-    root.config(background='#0C6991')
-    dashboard = Frame(root, width=1200, height= 100, bg ='#0C6991')
+    root.config(background='#1b2838')
+    dashboard = Frame(root, width=1200, height= 100, bg ='#171a21')
     dashboard.grid(row=0, column=0, pady=5)
-    menubar = Frame(root, width=1200, height= 100.,bg='#0C6991')
+    menubar = Frame(root, width=1200, height= 100.,bg='#1b2838')
     menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=800, bg='#0C6991')
+    scherm = Frame(root, width=1200, height=800, bg='#171a21')
     scherm.grid(row=2, column=0, pady=5)
-    hoofdmenu = Label(dashboard, text='Dashboard', bg='#0C6991', font=('Times New Roman', 18))
+    hoofdmenu = Label(dashboard, text='Dashboard', bg='#1b2838',fg ='#c7d5e0', font=('Times New Roman', 18))
     hoofdmenu.grid(row=0, column=0)
-    optie1 = Button(menubar, text='Optie1', bg='red', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie1dashboard()])
+    optie1 = Button(menubar, text='Home', bg='#171a21', fg ='#c7d5e0', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), maindashboard()])
     optie1.grid(row=1, column=0, pady=5)
-    optie2 = Button(menubar, text='Optie2', bg='blue', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie2dashboard()])
+    optie2 = Button(menubar, text='Statestieken', bg='#171a21', fg ='#c7d5e0', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), optie1dashboard()])
     optie2.grid(row=1, column=1, pady=5)
-    optie3 = Button(menubar, text='Optie3', bg='green', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie3dashboard()])
+    optie3 = Button(menubar, text='Vrienden', bg='#171a21',fg ='#c7d5e0',  font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), optie2dashboard()])
     optie3.grid(row=1, column=2, pady=5)
-    optie4 = Button(menubar, text='Optie4', bg='purple', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie4dashboard()])
-    optie4.grid(row=1, column=3, pady=5)
-    optie5 = Button(menubar, text='Optie5', bg='orange', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie5dashboard()])
-    optie5.grid(row=1, column=4, pady=5)
-    optie6 = Button(menubar, text='Optie6', bg='yellow',font=('Times New Roman', 18), width= 20)
-    optie6.grid(row=1, column=5, pady=5)
-    test1 = Label(scherm, text ='Hoofdscherm', bg='#0C6991', font=('Times New Roman', 11), width = 20)
+    test1 = Label(scherm, text ='Hoofdscherm', bg='#1b2838', font=('Times New Roman', 11), width = 20)
     test1.grid(row=2, column=0, pady=5)
     root.mainloop()
 
@@ -160,37 +152,27 @@ def optie1dashboard():
     data1 = meestgespeeldegamestijd(steamid)
     df1 = pd.DataFrame(data1)
     root = tkinter.Tk()
-    root.attributes('-fullscreen', True)
+    root.attributes('-fullscreen', False)
     root.maxsize = ('1200x1000')
-    root.title('Optie1dashboard')
-    root.config(background='#0C6991')
-    dashboard = Frame(root, width=1200, height=100, bg='#0C6991')
+    root.title('Statestieken')
+    root.config(background='#1b2838')
+    dashboard = Frame(root, width=1200, height=100, bg='#171a21')
     dashboard.grid(row=0, column=0, pady=5)
-    menubar = Frame(root, width=1200, height=100., bg='#0C6991')
+    menubar = Frame(root, width=1200, height=100., bg='#1b2838')
     menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=800, bg='#0C6991')
+    scherm = Frame(root, width=1200, height=800, bg='#171a21')
     scherm.grid(row=2, column=0, pady=5)
-    menu1 = Label(dashboard, text='Optie1', bg='#0C6991', font=('Times New Roman', 18))
-    menu1.grid(row=0, column=0)
-    terugnaardash = Button(dashboard, text='Dashboard', bg='#0C6991', font=('Times New Roman', 18), command=lambda: [root.destroy(), maindashboard()])
-    terugnaardash.grid(row=1, column = 0)
-    optie1 = Button(menubar, text='Optie1', bg='red', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie1dashboard()])
+    hoofdmenu = Label(dashboard, text='Statestieken', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+    hoofdmenu.grid(row=0, column=0)
+    optie1 = Button(menubar, text='Home', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), maindashboard()])
     optie1.grid(row=1, column=0, pady=5)
-    optie2 = Button(menubar, text='Optie2', bg='blue', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie2dashboard()])
+    optie2 = Button(menubar, text='Statestieken', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), optie1dashboard()])
     optie2.grid(row=1, column=1, pady=5)
-    optie3 = Button(menubar, text='Optie3', bg='green', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie3dashboard()])
+    optie3 = Button(menubar, text='Vrienden', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), optie2dashboard()])
     optie3.grid(row=1, column=2, pady=5)
-    optie4 = Button(menubar, text='Optie4', bg='purple', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie4dashboard()])
-    optie4.grid(row=1, column=3, pady=5)
-    optie5 = Button(menubar, text='Optie5', bg='orange', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie5dashboard()])
-    optie5.grid(row=1, column=4, pady=5)
-    optie6 = Button(menubar, text='Optie6', bg='yellow', font=('Times New Roman', 18), width=20)
-    optie6.grid(row=1, column=5, pady=5)
     figure1 = plt.Figure(figsize=(5, 8))
     ax1 = figure1.add_subplot(211)
     bar1 = FigureCanvasTkAgg(figure1, scherm)
@@ -202,38 +184,30 @@ def optie1dashboard():
 
 def optie2dashboard():
     root = tkinter.Tk()
-    root.attributes('-fullscreen', True)
+    root.attributes('-fullscreen', False)
     root.maxsize = ('1200x1000')
-    root.title('Optie2dashboard')
-    root.state('zoomed')
-    root.config(background='#0C6991')
-    dashboard = Frame(root, width=1200, height=100, bg='#0C6991')
+    root.title('Vrienden')
+    root.config(background='#1b2838')
+    dashboard = Frame(root, width=1200, height=100, bg='#171a21')
     dashboard.grid(row=0, column=0, pady=5)
-    menubar = Frame(root, width=1200, height=100., bg='#0C6991')
+    menubar = Frame(root, width=1200, height=100., bg='#1b2838')
     menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=800, bg='#0C6991')
+    scherm = Frame(root, width=1200, height=800, bg='#171a21')
     scherm.grid(row=2, column=0, pady=5)
-    menu1 = Label(dashboard, text='Optie2', bg='#0C6991', font=('Times New Roman', 18))
-    menu1.grid(row=0, column=0)
-    terugnaardash = Button(dashboard, text='Dashboard', bg='#0C6991', font=('Times New Roman', 18), command=lambda: [root.destroy(), maindashboard()])
-    terugnaardash.grid(row=1, column = 0)
-    optie1 = Button(menubar, text='Optie1', bg='red', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie1dashboard()])
+    hoofdmenu = Label(dashboard, text='Vrienden', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+    hoofdmenu.grid(row=0, column=0)
+    optie1 = Button(menubar, text='Home', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), maindashboard()])
     optie1.grid(row=1, column=0, pady=5)
-    optie2 = Button(menubar, text='Optie2', bg='blue', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie2dashboard()])
+    optie2 = Button(menubar, text='Statestieken', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), optie1dashboard()])
     optie2.grid(row=1, column=1, pady=5)
-    optie3 = Button(menubar, text='Optie3', bg='green', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie3dashboard()])
+    optie3 = Button(menubar, text='Vrienden', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy(), optie2dashboard()])
     optie3.grid(row=1, column=2, pady=5)
-    optie4 = Button(menubar, text='Optie4', bg='purple', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie4dashboard()])
-    optie4.grid(row=1, column=3, pady=5)
-    optie5 = Button(menubar, text='Optie5', bg='orange', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie5dashboard()])
-    optie5.grid(row=1, column=4, pady=5)
-    optie6 = Button(menubar, text='Optie6', bg='yellow', font=('Times New Roman', 18), width=20)
-    optie6.grid(row=1, column=5, pady=5)
+    test1 = Label(scherm, text='Hoofdscherm', bg='#1b2838', font=('Times New Roman', 11), width=20)
+    test1.grid(row=2, column=0, pady=5)
+    root.mainloop()
     test1 = Label(scherm, text =sorteerdavgspeeltijd() , bg='#0C6991', font=('Times New Roman', 11), width = 50)
     test1.grid(row=2, column=0, pady=5)
     test2 = Label(scherm, text =duurstespellen(), bg='#0C6991', font=('Times New Roman', 11), width=50)
@@ -242,109 +216,7 @@ def optie2dashboard():
     test3.grid(row=2, column=2, pady=5)
     root.mainloop()
 
-def optie3dashboard():
-    root = tkinter.Tk()
-    root.attributes('-fullscreen', True)
-    root.maxsize = ('1200x1000')
-    root.title('Optie3dashboard')
-    root.config(background='#0C6991')
-    dashboard = Frame(root, width=1200, height=100, bg='#0C6991')
-    dashboard.grid(row=0, column=0, pady=5)
-    menubar = Frame(root, width=1200, height=100., bg='#0C6991')
-    menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=800, bg='#0C6991')
-    scherm.grid(row=2, column=0, pady=5)
-    menu1 = Label(dashboard, text='Optie3', bg='#0C6991', font=('Times New Roman', 18))
-    menu1.grid(row=0, column=0)
-    terugnaardash = Button(dashboard, text='Dashboard', bg='#0C6991', font=('Times New Roman', 18), command=lambda: [root.destroy(), maindashboard()])
-    terugnaardash.grid(row=1, column = 0)
-    optie1 = Button(menubar, text='Optie1', bg='red', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie1dashboard()])
-    optie1.grid(row=1, column=0, pady=5)
-    optie2 = Button(menubar, text='Optie2', bg='blue', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie2dashboard()])
-    optie2.grid(row=1, column=1, pady=5)
-    optie3 = Button(menubar, text='Optie3', bg='green', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie3dashboard()])
-    optie3.grid(row=1, column=2, pady=5)
-    optie4 = Button(menubar, text='Optie4', bg='purple', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie4dashboard()])
-    optie4.grid(row=1, column=3, pady=5)
-    optie5 = Button(menubar, text='Optie5', bg='orange', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie5dashboard()])
-    optie5.grid(row=1, column=4, pady=5)
-    optie6 = Button(menubar, text='Optie6', bg='yellow',font=('Times New Roman', 18), width= 20)
-    optie6.grid(row=1, column=5, pady=5)
-    root.mainloop()
 
-def optie4dashboard():
-    root = tkinter.Tk()
-    root.attributes('-fullscreen', True)
-    root.maxsize = ('1200x1000')
-    root.title('Optie4dashboard')
-    root.config(background='#0C6991')
-    dashboard = Frame(root, width=1200, height=100, bg='#0C6991')
-    dashboard.grid(row=0, column=0, pady=5)
-    menubar = Frame(root, width=1200, height=100., bg='#0C6991')
-    menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=800, bg='#0C6991')
-    scherm.grid(row=2, column=0, pady=5)
-    menu1 = Label(dashboard, text='Optie4', bg='#0C6991', font=('Times New Roman', 18))
-    menu1.grid(row=0, column=0)
-    terugnaardash = Button(dashboard, text='Dashboard', bg='#0C6991', font=('Times New Roman', 18), command=lambda: [root.destroy(), maindashboard()])
-    terugnaardash.grid(row=1, column = 0)
-    optie1 = Button(menubar, text='Optie1', bg='red', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie1dashboard()])
-    optie1.grid(row=1, column=0, pady=5)
-    optie2 = Button(menubar, text='Optie2', bg='blue', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie2dashboard()])
-    optie2.grid(row=1, column=1, pady=5)
-    optie3 = Button(menubar, text='Optie3', bg='green', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie3dashboard()])
-    optie3.grid(row=1, column=2, pady=5)
-    optie4 = Button(menubar, text='Optie4', bg='purple', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie4dashboard()])
-    optie4.grid(row=1, column=3, pady=5)
-    optie5 = Button(menubar, text='Optie5', bg='orange', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie5dashboard()])
-    optie5.grid(row=1, column=4, pady=5)
-    optie6 = Button(menubar, text='Optie6', bg='yellow', font=('Times New Roman', 18), width=20)
-    optie6.grid(row=1, column=5, pady=5)
-    root.mainloop()
-
-def optie5dashboard():
-    root = tkinter.Tk()
-    root.maxsize = ('1200x1000')
-    root.title('Optie5dashboard')
-    root.config(background='#0C6991')
-    dashboard = Frame(root, width=1200, height=100, bg='#0C6991')
-    dashboard.grid(row=0, column=0, pady=5)
-    menubar = Frame(root, width=1200, height=100., bg='#0C6991')
-    menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=800, bg='#0C6991')
-    scherm.grid(row=2, column=0, pady=5)
-    menu1 = Label(dashboard, text='Optie5', bg='#0C6991', font=('Times New Roman', 18))
-    menu1.grid(row=0, column=0)
-    terugnaardash = Button(dashboard, text='Dashboard', bg='#0C6991', font=('Times New Roman', 18), command=lambda: [root.destroy(), maindashboard()])
-    terugnaardash.grid(row=1, column = 0)
-    optie1 = Button(menubar, text='Optie1', bg='red', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie1dashboard()])
-    optie1.grid(row=1, column=0, pady=5)
-    optie2 = Button(menubar, text='Optie2', bg='blue', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie2dashboard()])
-    optie2.grid(row=1, column=1, pady=5)
-    optie3 = Button(menubar, text='Optie3', bg='green', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie3dashboard()])
-    optie3.grid(row=1, column=2, pady=5)
-    optie4 = Button(menubar, text='Optie4', bg='purple', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie4dashboard()])
-    optie4.grid(row=1, column=3, pady=5)
-    optie5 = Button(menubar, text='Optie5', bg='orange', font=('Times New Roman', 18), width=20,
-                    command=lambda: [root.destroy(), optie5dashboard()])
-    optie5.grid(row=1, column=4, pady=5)
-    optie6 = Button(menubar, text='Optie6', bg='yellow',font=('Times New Roman', 18), width= 20)
-    optie6.grid(row=1, column=5, pady=5)
-    root.mainloop()
 
 
 root = tkinter.Tk()
