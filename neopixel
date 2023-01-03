@@ -1,0 +1,20 @@
+from machine import Pin
+import time
+
+np = neopixel.NeoPixel(machine.Pin(13), 8)
+
+
+# wachten voor data.
+while True:
+    data = input()
+
+    print("Received '" + data + "'.")
+    if data == '0':
+        for x in np:
+            np[x] = (255, 0, 0)
+    elif data == '1':
+        for x in np:
+            np[x] = (0, 255, 0)
+    elif data == '2':
+        for x in np:
+            np[x] = (0, 0, 255)
