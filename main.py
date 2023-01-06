@@ -217,16 +217,41 @@ def optie2dashboard():
     root.mainloop()
 
 
+def idcheck(steamid):
+    lst = ['q', 'w', 'e', 'r', 't','y','u','i','o','p', 'a','s',
+           'd','f','g','h', 'j','k','l','z','x','c','v','b','n','m']
+    for x in steamid:
+        if x in lst:
+            root = tkinter.Tk()
+            root.title('Steam')
+            root.config(background='#1b2838')
+            root.geometry = ('300x300')
+            label1 = Label(root, text='Het steamid dat u heeft ingevoerd is niet juist', bg='#1b2838', fg='#c7d5e0',
+                               font=('Times New Roman', 18))
+            label1.pack(pady=150)
+            break
+        else:
+            if len(steamid) == 17:
+                maindashboard()
+            else:
+                root = tkinter.Tk()
+                root.title('Steam')
+                root.config(background='#1b2838')
+                root.geometry = ('300x300')
+                label1 = Label(root, text='Het steamid dat u heeft ingevoerd is niet juist', bg='#1b2838',fg ='#c7d5e0',  font=('Times New Roman', 18))
+                label1.pack(pady=150)
+
 
 
 root = tkinter.Tk()
 root.title('Steam')
-root.geometry= ('400x400')
-label1 = Label(root, text='Steamid:')
+root.config(background='#1b2838')
+root.geometry= ('300x300')
+label1 = Label(root, text='Steamid:', bg='#1b2838',fg ='#c7d5e0',  font=('Times New Roman', 18))
 label1.pack()
-steamidentry = Entry(root)
+steamidentry = Entry(root, bg='White',fg ='#c7d5e0',  font=('Times New Roman', 18))
 steamidentry.pack()
-button = Button(root, text='Zie statestieken', command=lambda: [root.iconify(), maindashboard()])
+button = Button(root, text='Zie statestieken',bg='#1b2838',fg ='#c7d5e0',  font=('Times New Roman', 18), command=lambda: [root.iconify(), idcheck(steamidentry.get())])
 button.pack()
 root.mainloop()
 
