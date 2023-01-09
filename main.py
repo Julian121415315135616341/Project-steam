@@ -9,6 +9,7 @@ from collections import Counter
 
 
 '''steamid voor test: 76561198147947505'''
+
 def playersummaries(friendid):
     response = requests.get(f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamids={friendid}").json()
     return response
@@ -43,6 +44,13 @@ def gametime(steamid):
             'time': time
         }
         lst.append(dict)
+    return lst
+
+def ownedgames(steamid):
+    lst = []
+    response = requests.get(f'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={steamid}&format=json&include_appinfo=1').json()
+    for i in response['response']['games']:
+        lst.append(i['name'])
     return lst
 
 def totalgametimeallfriends(steamid):
@@ -123,6 +131,26 @@ def duurstespellen():
         lst.append(i['name'])
     return 'Duurste Spellen' '\n'+ '1: '+lst[0] + '\n' + '2: '+lst[1 ] + '\n' + '3: '+lst[2] + '\n' + '4: '+lst[3] +'\n' + '5: '+lst[4]
 
+def zelfdespellenowned(steamid, friendid):
+    lst =[]
+    mijngames = ownedgames(steamid)
+    vriendgames = ownedgames(friendid)
+    for x in mijngames:
+        if x in vriendgames:
+            lst.append(x)
+    return lst
+print(zelfdespellenowned(76561198147947505, 76561199040375838))
+def zelfdespellengui(steamid, friendid):
+    root = tkinter.Tk()
+    root.attributes('-fullscreen', False)
+    root.maxsize = ('1200x1000')
+    root.title('Dashboard')
+    root.config(background='#1b2838')
+    data = zelfdespellenowned(steamid, friendid)
+    label1 = Label(root)
+    label1.pack()
+    for i in data:
+        label1.insert(END, i +'\n')
 
 
 def maindashboard():
@@ -205,7 +233,7 @@ def optie2dashboard():
     dashboard.grid(row=0, column=0, pady=5)
     menubar = Frame(root, width=1200, height=100., bg='#1b2838')
     menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=800, bg='#171a21')
+    scherm = Frame(root, width=1200, height=800, bg='#1b2838')
     scherm.grid(row=2, column=0, pady=5)
     hoofdmenu = Label(dashboard, text='hier komt misschien nog wat', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
     hoofdmenu.grid(row=0, column=0)
@@ -223,13 +251,19 @@ def optie2dashboard():
     stoppen.grid(row=1, column=3, pady=5)
     test1 = Label(scherm, text='Hoofdscherm', bg='#1b2838', font=('Times New Roman', 11), width=20)
     test1.grid(row=2, column=0, pady=5)
-    root.mainloop()
-    test1 = Label(scherm, text =sorteerdavgspeeltijd() , bg='#0C6991', font=('Times New Roman', 11), width = 50)
+    test1 = Label(scherm, text =sorteerdavgspeeltijd() , bg='#1b2838', font=('Times New Roman', 11), width = 50)
     test1.grid(row=2, column=0, pady=5)
-    test2 = Label(scherm, text =duurstespellen(), bg='#0C6991', font=('Times New Roman', 11), width=50)
+    test2 = Label(scherm, text =duurstespellen(), bg='#1b2838', font=('Times New Roman', 11), width=50)
     test2.grid(row=2, column=1, pady=5)
-    test3 = Label(scherm, text =sorteerdmediaanspeeltijd(), bg='#0C6991', font=('Times New Roman', 11), width=50)
-    test3.grid(row=2, column=2, pady=5)
+    test3 = Label(scherm, text =sorteerdmediaanspeeltijd(), bg='#1b2838', font=('Times New Roman', 11), width=50)
+    test3.grid(row=2, column=3, pady=5)
+    label1 = Label(scherm, text='Steamid vriend:', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+    label1.grid(row=3, column=1)
+    steamidentryvriend = Entry(scherm, bg='1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+    steamidentry.grid(row=3, column=2)
+    button = Button(scherm, text='Zie spellen die jullie beide hebben', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18),
+                    command=lambda: [zelfdespellenowned(steamidentry.get(), steamidentryvriend.get())])
+    button.grid(row=4, column=2)
     root.mainloop()
 
 
