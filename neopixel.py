@@ -1,11 +1,12 @@
-from machine import Pin
-import time
+import machine
+import neopixel
+
 
 np = neopixel.NeoPixel(machine.Pin(13), 8)
 
-
 # wachten voor data.
 while True:
+
     data = input()
 
     print("Received '" + data + "'.")
