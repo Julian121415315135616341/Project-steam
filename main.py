@@ -12,7 +12,12 @@ from collections import Counter
 def playersummaries(friendid):
     response = requests.get(f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamids={friendid}").json()
     return response
-
+def playername(steamid):
+    lst = []
+    response = requests.get(f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamids={steamid}").json()
+    for i in response['response']['players']:
+        lst.append(i['personaname'])
+    return lst[0]
 
 def friendlist(steamid):
     lst =[]
@@ -180,12 +185,14 @@ def optie1dashboard():
                      command=lambda: [root.destroy()])
     stoppen.grid(row=1, column=3, pady=5)
     figure1 = plt.Figure(figsize=(5, 8))
+    figure1.patch.set_facecolor('#1b2838')
     ax1 = figure1.add_subplot(211)
     bar1 = FigureCanvasTkAgg(figure1, scherm)
     bar1.get_tk_widget().pack(side=tkinter.LEFT, fill=tkinter.BOTH)
     df1 = df1[['game', 'time']].groupby('game').sum()
     df1.plot(kind='bar', legend=True, ax=ax1)
-    ax1.set_title('Vrienden speeltijd')
+    ax1.set_title(f'Speeltijd van vrienden van {playername(steamid)}')
+    ax1.patch.set_facecolor('#1b2838')
     root.mainloop()
 
 def optie2dashboard():
@@ -200,7 +207,7 @@ def optie2dashboard():
     menubar.grid(row=1, column=0, pady=5)
     scherm = Frame(root, width=1200, height=800, bg='#171a21')
     scherm.grid(row=2, column=0, pady=5)
-    hoofdmenu = Label(dashboard, text='Vrienden', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+    hoofdmenu = Label(dashboard, text='hier komt misschien nog wat', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
     hoofdmenu.grid(row=0, column=0)
     optie1 = Button(menubar, text='Home', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 18), width=20,
                     command=lambda: [root.destroy(), maindashboard()])
@@ -249,7 +256,7 @@ def idcheck(steamid):
                 root.geometry = ('300x300')
                 label1 = Label(root, text='Het steamid dat u heeft ingevoerd is niet juist', bg='#1b2838',fg ='#c7d5e0',  font=('Times New Roman', 18))
                 label1.pack(pady=150)
-
+                break
 
 
 root = tkinter.Tk()
