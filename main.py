@@ -143,6 +143,9 @@ def maindashboard():
     optie3 = Button(menubar, text='Vrienden', bg='#171a21',fg ='#c7d5e0',  font=('Times New Roman', 18), width=20,
                     command=lambda: [root.destroy(), optie2dashboard()])
     optie3.grid(row=1, column=2, pady=5)
+    stoppen = Button(menubar, text='Stoppen', bg='#171a21', fg ='#c7d5e0', font=('Times New Roman', 18), width=20,
+                    command=lambda: [root.destroy()])
+    stoppen.grid(row=1, column=3, pady=5)
     test1 = Label(scherm, text ='Hoofdscherm', bg='#1b2838', font=('Times New Roman', 11), width = 20)
     test1.grid(row=2, column=0, pady=5)
     root.mainloop()
@@ -173,6 +176,9 @@ def optie1dashboard():
     optie3 = Button(menubar, text='Vrienden', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 18), width=20,
                     command=lambda: [root.destroy(), optie2dashboard()])
     optie3.grid(row=1, column=2, pady=5)
+    stoppen = Button(menubar, text='Stoppen', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 18), width=20,
+                     command=lambda: [root.destroy()])
+    stoppen.grid(row=1, column=3, pady=5)
     figure1 = plt.Figure(figsize=(5, 8))
     ax1 = figure1.add_subplot(211)
     bar1 = FigureCanvasTkAgg(figure1, scherm)
@@ -205,6 +211,9 @@ def optie2dashboard():
     optie3 = Button(menubar, text='Vrienden', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 18), width=20,
                     command=lambda: [root.destroy(), optie2dashboard()])
     optie3.grid(row=1, column=2, pady=5)
+    stoppen = Button(menubar, text='Stoppen', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 18), width=20,
+                     command=lambda: [root.destroy()])
+    stoppen.grid(row=1, column=3, pady=5)
     test1 = Label(scherm, text='Hoofdscherm', bg='#1b2838', font=('Times New Roman', 11), width=20)
     test1.grid(row=2, column=0, pady=5)
     root.mainloop()
