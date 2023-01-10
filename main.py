@@ -142,18 +142,21 @@ def zelfdespellenowned(steamid, friendid):
 print(zelfdespellenowned(76561198147947505, 76561199040375838))
 def zelfdespellengui(steamid, friendid):
     root2 = tkinter.Tk()
-    root2.attributes('-fullscreen', False)
-    root2.maxsize = ('1200x1000')
-    root2.title('Dashboard')
+    root2.maxsize = ('700x350')
+    root2.title('Games')
     root2.config(background='#1b2838')
     data = zelfdespellenowned(steamid, friendid)
-    label1= Label(text=f'Spellen die {playername(steamid)} en {playername(friendid)} allebei hebben:', fg='#c7d5e0', font=('Times New Roman', 18))
-    label1.grid(row=1, column=1)
-    text = Text(root2)
-    text.grid(row=2, column =1)
+    label1= Label(root2, text=(f'Spellen die {playername(steamid)} en {playername(friendid)} allebei hebben:'), bg='#1b2838', font=('Times New Roman', 18), anchor='center')
+    label1.pack(padx=250, pady= 20)
+    text = Text(root2, bg='#1b2838')
+    text.tag_configure("center", justify='center')
+    text.pack(padx=250)
     for i in data:
         text.insert(END, i +'\n')
+    text.tag_add("center", "1.0", "end")
 
+#76561198147947505
+#76561199040375838
 
 def maindashboard():
     root = tkinter.Tk()
