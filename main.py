@@ -102,6 +102,22 @@ def steamdata():
         lst.append(i['name'])
     return 'Eerste 5 spellen' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
 
+def steamreviews():
+    bestand = open('steam.json')
+    data = json.load(bestand)
+    dictreviews = {}
+    for i in data:
+        if i['positive_ratings'] + i['negative_ratings'] > 3000:
+            positief = i['positive_ratings']
+            negatief = i['negative_ratings']
+            positiefprocent = positief / (positief + negatief) * 100
+            positiefprocent = round(positiefprocent, 2)
+            teupdaten = {i['name']: positiefprocent}
+            dictreviews.update(teupdaten)
+    return dict(sorted(dictreviews.items(), key=lambda item: item[1], reverse=True)[:5])
+print(steamreviews())
+
+
 def sorteerdavgspeeltijd():
     lst = []
     bestand = open('steam.json')
@@ -139,7 +155,7 @@ def zelfdespellenowned(steamid, friendid):
         if x in vriendgames:
             lst.append(x)
     return lst
-print(zelfdespellenowned(76561198147947505, 76561199040375838))
+#print(zelfdespellenowned(76561198147947505, 76561199040375838))
 def zelfdespellengui(steamid, friendid):
     root2 = tkinter.Tk()
     root2.maxsize = ('700x350')
