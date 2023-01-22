@@ -12,11 +12,12 @@ import PIL.ImageTk
 
 
 
-'''steamid voor test: 76561198147947505'''
+'''steamid voor test: 76561199040375838'''
 
 def playersummaries(friendid):
     response = requests.get(f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamids={friendid}").json()
     return response
+
 def playername(steamid):
     lst = []
     response = requests.get(f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamids={steamid}").json()
@@ -36,6 +37,18 @@ def friendsdata(steamid):
     for i in friends:
         return(playersummaries(i))
 
+def onlinevrienden(steamid):
+    online = []
+    busy = []
+    offline =[]
+    away = []
+    snooze = []
+    vriendenlijst = friendlist(steamid)
+    for i in vriendenlijst:
+        data = playersummaries(i)
+        if data['response']['personastate'] == 0:
+            offline.append(data['response']['personaname'])
+    return offline
 
 def gametime(steamid):
     lst = []
@@ -49,13 +62,46 @@ def gametime(steamid):
         }
         lst.append(dict)
     return lst
-
 def ownedgames(steamid):
     lst = []
     response = requests.get(f'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={steamid}&format=json&include_appinfo=1').json()
     for i in response['response']['games']:
         lst.append(i['name'])
     return lst
+
+def ownedgamesallfriends(steamid):
+    lst = []
+    friends = friendlist(steamid)
+    for i in friends:
+        try:
+            games = ownedgames(i)
+            for x in games:
+                lst.append(x)
+        except:
+            continue
+    freqs = {}
+    for i in lst:
+        if i in freqs:
+            freqs[i] += 1
+        else:
+            freqs[i] = 1
+    lstname = []
+    lstamount = []
+    for i in freqs.keys():
+        lastname.append(i)
+    for y in freqs.values():
+        lstamount.append(y)
+    dict = {
+        'game': [],
+        'aantal': []
+    }
+
+    for i in lstname:
+        dict['aantal'].append(i)
+    for x in lstamound:
+        dict['game'].append(x)
+    return dict
+
 
 def totalgametimeallfriends(steamid):
     totaalgametime = []
@@ -95,7 +141,7 @@ def meestgespeeldegamestijd(steamid):
     return dict
 
 
-#print(meestgespeeldegamestijd('76561198147947505'))
+print(meestgespeeldegames('76561199040375838'))
 
 def steamdata():
 
@@ -119,7 +165,6 @@ def steamreviews():
             teupdaten = {i['name']: positiefprocent}
             dictreviews.update(teupdaten)
     return dict(sorted(dictreviews.items(), key=lambda item: item[1], reverse=True)[:5])
-print(steamreviews())
 
 def sorteerdavgspeeltijd():
     lst = []
@@ -176,29 +221,28 @@ def zelfdespellengui(steamid, friendid):
 #76561198147947505
 #76561199040375838
 
+
 def maindashboard():
     root = tkinter.Toplevel()
     root.attributes('-fullscreen',True)
     root.maxsize=('1200x1000')
     root.title('Dashboard')
     root.config(background='#1b2838')
-    image = PIL.Image.open('steamlogo.png')
-    resized_image = image.resize((300, 150))
+    image = PIL.Image.open('steamlogo2.png')
+    resized_image = image.resize((1200, 100))
     converted_image = PIL.ImageTk.PhotoImage(resized_image)
-    dashboard = Frame(root, width=1200, height= 150, bg ='#171a21')
+    dashboard = Frame(root, width=1200, height= 100, bg ='#171a21')
     dashboard.grid(row=0, column=0, pady=5)
     menubar = Frame(root, width=1200, height= 100.,bg='#1b2838')
     menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=750, bg='#171a21')
+    scherm = Frame(root, width=1200, height=800, bg='#171a21')
     scherm.grid(row=2, column=0, pady=5)
-    scherm.grid_rowconfigure(0, weight=1)
-    scherm.grid_columnconfigure(0, weight=1)
-    hoofdmenu = Label(dashboard, text='Dashboard', bg='#1b2838',fg ='#c7d5e0', font=('Times New Roman', 30), width=300)
-    hoofdmenu.grid(sticky=N)
-    optie1 = Button(menubar, text='Home', bg='#171a21', fg ='#c7d5e0', font=('Times New Roman', 24), width=21,
+    hoofdmenu = Label(master=dashboard, image=converted_image, width=1200, height=100, bg ='#1b2838')
+    hoofdmenu.grid(row=0, column=10)
+    optie1 = Button(menubar, text='Home', bg='#171a21', fg ='#c7d5e0', font=('Times New Roman', 24, 'bold', 'underline'), width=21,
                     command=lambda: [root.destroy(), maindashboard()])
     optie1.grid(row=1, column=0, pady=5)
-    optie2 = Button(menubar, text='Statestieken', bg='#171a21', fg ='#c7d5e0', font=('Times New Roman', 24), width=21,
+    optie2 = Button(menubar, text='Statistieken', bg='#171a21', fg ='#c7d5e0', font=('Times New Roman', 24), width=21,
                     command=lambda: [root.destroy(), optie1dashboard()])
     optie2.grid(row=1, column=1, pady=5)
     optie3 = Button(menubar, text='Vrienden', bg='#171a21',fg ='#c7d5e0',  font=('Times New Roman', 24), width=21,
@@ -207,16 +251,14 @@ def maindashboard():
     stoppen = Button(menubar, text='Stoppen', bg='#171a21', fg ='#c7d5e0', font=('Times New Roman', 24), width=21,
                     command=lambda: [root.destroy()])
     stoppen.grid(row=1, column=3, pady=5)
-    test1 = Label(scherm, text='Hoofdscherm', bg='#1b2838', font=('Times New Roman', 18))
+    test1 = Label(scherm, text='Hoofdscherm', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
     test1.grid(row=2, column=0, pady=5)
-    label2 = Label(scherm, text=sorteerdavgspeeltijd(), bg='#1b2838', font=('Times New Roman', 18))
+    label2 = Label(scherm, text=sorteerdavgspeeltijd(), bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
     label2.grid(row=2, column=0, pady=5)
-    label3 = Label(scherm, text=duurstespellen(), bg='#1b2838', font=('Times New Roman', 18))
+    label3 = Label(scherm, text=duurstespellen(), bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
     label3.grid(row=2, column=1, pady=5)
-    label4 = Label(scherm, text=sorteerdmediaanspeeltijd(), bg='#1b2838', font=('Times New Roman', 18))
+    label4 = Label(scherm, text=sorteerdmediaanspeeltijd(), bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
     label4.grid(row=2, column=2, pady=5)
-    imagelabel = Label(master=dashboard, image=converted_image, width=300, height=150, bg ='#1b2838')
-    imagelabel.grid(sticky=E)
     root.mainloop()
 
 def optie1dashboard():
@@ -226,20 +268,23 @@ def optie1dashboard():
     root = tkinter.Toplevel()
     root.attributes('-fullscreen', True)
     root.maxsize = ('1200x1000')
-    root.title('Statestieken')
+    root.title('Statistieken')
     root.config(background='#1b2838')
-    dashboard = Frame(root, width=1200, height=200, bg='#171a21')
+    image = PIL.Image.open('steamlogo2.png')
+    resized_image = image.resize((1200, 100))
+    converted_image = PIL.ImageTk.PhotoImage(resized_image)
+    dashboard = Frame(root, width=1200, height=100, bg='#171a21')
     dashboard.grid(row=0, column=0, pady=5)
     menubar = Frame(root, width=1200, height=100., bg='#1b2838')
     menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=700, bg='#171a21')
+    scherm = Frame(root, width=1200, height=800, bg='#171a21')
     scherm.grid(row=2, column=0, pady=5)
-    hoofdmenu = Label(dashboard, text='Statestieken', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 30))
+    hoofdmenu = Label(master=dashboard, image=converted_image, width=1200, height=100, bg='#1b2838')
     hoofdmenu.grid(row=0, column=0)
     optie1 = Button(menubar, text='Home', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
                     command=lambda: [root.destroy(), maindashboard()])
     optie1.grid(row=1, column=0, pady=5)
-    optie2 = Button(menubar, text='Statestieken', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
+    optie2 = Button(menubar, text='Statistieken', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24, 'bold', 'underline'), width=21,
                     command=lambda: [root.destroy(), optie1dashboard()])
     optie2.grid(row=1, column=1, pady=5)
     optie3 = Button(menubar, text='Vrienden', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
@@ -255,6 +300,7 @@ def optie1dashboard():
     bar1.get_tk_widget().pack(side=tkinter.LEFT, fill=tkinter.BOTH)
     df1 = df1[['game', 'time']].groupby('game').sum()
     df1.plot(kind='bar', legend=True, ax=ax1)
+    ax1.set_title('Vrienden speeltijd')
     ax1.set_title(f'Speeltijd van vrienden van {playername(steamid)}')
     ax1.patch.set_facecolor('#1b2838')
     root.mainloop()
@@ -265,21 +311,24 @@ def optie2dashboard():
     root.maxsize = ('1200x1000')
     root.title('Vrienden')
     root.config(background='#1b2838')
-    dashboard = Frame(root, width=1200, height=200, bg='#171a21')
+    image = PIL.Image.open('steamlogo2.png')
+    resized_image = image.resize((1200, 100))
+    converted_image = PIL.ImageTk.PhotoImage(resized_image)
+    dashboard = Frame(root, width=1200, height=100, bg='#171a21')
     dashboard.grid(row=0, column=0, pady=5)
     menubar = Frame(root, width=1200, height=100., bg='#1b2838')
     menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=700, bg='#1b2838')
+    scherm = Frame(root, width=1200, height=800, bg='#1b2838')
     scherm.grid(row=2, column=0, pady=5)
-    hoofdmenu = Label(dashboard, text='Vriendenactiviteit', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 30))
+    hoofdmenu = Label(master=dashboard, image=converted_image, width=1200, height=100, bg='#1b2838')
     hoofdmenu.grid(row=0, column=0)
     optie1 = Button(menubar, text='Home', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
                     command=lambda: [root.destroy(), maindashboard()])
     optie1.grid(row=1, column=0, pady=5)
-    optie2 = Button(menubar, text='Statestieken', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
+    optie2 = Button(menubar, text='Statistieken', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
                     command=lambda: [root.destroy(), optie1dashboard()])
     optie2.grid(row=1, column=1, pady=5)
-    optie3 = Button(menubar, text='Vrienden', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
+    optie3 = Button(menubar, text='Vrienden', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24, 'bold', 'underline'), width=21,
                     command=lambda: [root.destroy(), optie2dashboard()])
     optie3.grid(row=1, column=2, pady=5)
     stoppen = Button(menubar, text='Stoppen', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
