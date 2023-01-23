@@ -231,8 +231,6 @@ def zelfdespellengui(steamid, friendid):
 def maindashboard():
     root = tkinter.Toplevel()
     data = steamreviews()
-    new = (', '.join(f"({', '.join(str(x) for x in item)})" for item in data))
-    print(new)
     root.attributes('-fullscreen',True)
     root.maxsize=('1200x1000')
     root.title('Dashboard')
@@ -244,7 +242,7 @@ def maindashboard():
     dashboard.grid(row=0, column=0, pady=5)
     menubar = Frame(root, width=1200, height= 100.,bg='#1b2838')
     menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=800, bg='#171a21')
+    scherm = Frame(root, width=1200, height=800, bg='#1b2838')
     scherm.grid(row=2, column=0, pady=5)
     hoofdmenu = Label(master=dashboard, image=converted_image, width=1200, height=100, bg ='#1b2838')
     hoofdmenu.grid(row=0, column=10)
@@ -265,17 +263,18 @@ def maindashboard():
     label2 = Label(scherm, text=sorteerdavgspeeltijd(), bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
     label2.grid(row=2, column=0, pady=5)
     label3 = Label(scherm, text=duurstespellen(), bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
-    label3.grid(row=2, column=1, pady=5)
+    label3.grid(row=2, column=1, pady=100)
     label4 = Label(scherm, text=sorteerdmediaanspeeltijd(), bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
     label4.grid(row=2, column=2, pady=5)
-    text = Text(root, bg='#1b2838')
-    text.tag_configure("center", justify='center')
-    text.grid(row=3, column=1)
+    labellist = Label(scherm, text='De 5 spellen met hoogste procentuele positieve reviews', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+    labellist.grid(row=3, column=1, pady=10)
+    x = 4
     for i in data:
-        text.insert(END, i + '\n')
-    text.tag_add("center", "1.0", "end")
+        Label5 = Label(scherm, text =i, bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+        Label5.grid(row=x, column=1)
+        x+=1
     root.mainloop()
-
+##76561198347428691
 #76561198147947505
 #76561199040375838
 
