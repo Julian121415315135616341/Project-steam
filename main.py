@@ -246,7 +246,7 @@ def maindashboard():
     scherm.grid(row=2, column=0, pady=5)
     hoofdmenu = Label(master=dashboard, image=converted_image, width=1200, height=100, bg ='#1b2838')
     hoofdmenu.grid(row=0, column=10)
-    optie1 = Button(menubar, text='Home', bg='#171a21', fg ='#c7d5e0', font=('Times New Roman', 24, 'bold', 'underline'), width=21,
+    optie1 = Button(menubar, text='Home', bg='#171a21', fg ='#c7d5e0', highlightthickness=4, font=('Times New Roman', 24, 'bold', 'underline'), width=21,
                     command=lambda: [root.destroy(), maindashboard()])
     optie1.grid(row=1, column=0, pady=5)
     optie2 = Button(menubar, text='Statistieken', bg='#171a21', fg ='#c7d5e0', font=('Times New Roman', 24), width=21,
@@ -303,7 +303,7 @@ def optie1dashboard():
     optie1 = Button(menubar, text='Home', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
                     command=lambda: [root.destroy(), maindashboard()])
     optie1.grid(row=1, column=0, pady=5)
-    optie2 = Button(menubar, text='Statistieken', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24, 'bold', 'underline'), width=21,
+    optie2 = Button(menubar, text='Statistieken', bg='#171a21', highlightthickness=4, fg='#c7d5e0', font=('Times New Roman', 24, 'bold', 'underline'), width=21,
                     command=lambda: [root.destroy(), optie1dashboard()])
     optie2.grid(row=1, column=1, pady=5)
     optie3 = Button(menubar, text='Vrienden', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
@@ -361,7 +361,7 @@ def optie2dashboard():
     optie2 = Button(menubar, text='Statistieken', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
                     command=lambda: [root.destroy(), optie1dashboard()])
     optie2.grid(row=1, column=1, pady=5)
-    optie3 = Button(menubar, text='Vrienden', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24, 'bold', 'underline'), width=21,
+    optie3 = Button(menubar, text='Vrienden', bg='#171a21', highlightthickness=4, fg='#c7d5e0', font=('Times New Roman', 24, 'bold', 'underline'), width=21,
                     command=lambda: [root.destroy(), optie2dashboard()])
     optie3.grid(row=1, column=2, pady=5)
     stoppen = Button(menubar, text='Stoppen', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
