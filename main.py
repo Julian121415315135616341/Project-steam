@@ -1,5 +1,6 @@
 import json
 import tkinter
+from operator import itemgetter
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -85,22 +86,27 @@ def ownedgamesallfriends(steamid):
             freqs[i] += 1
         else:
             freqs[i] = 1
+    try:
+        del freqs["Tom Clancy's Rainbow Six Siege - Test Server"]
+    except:
+        gay = True
+
+    res = dict(sorted(freqs.items(), key=itemgetter(1), reverse=True)[:5])
     lstname = []
     lstamount = []
-    for i in freqs.keys():
-        lastname.append(i)
-    for y in freqs.values():
+    for i in res.keys():
+        lstname.append(i)
+    for y in res.values():
         lstamount.append(y)
-    dict = {
+    dicteigenaar = {
         'game': [],
         'aantal': []
     }
-
     for i in lstname:
-        dict['aantal'].append(i)
-    for x in lstamound:
-        dict['game'].append(x)
-    return dict
+        dicteigenaar['aantal'].append(str(i))
+    for x in lstamount:
+        dicteigenaar['game'].append(str(x))
+    return dicteigenaar
 
 
 def totalgametimeallfriends(steamid):
@@ -117,7 +123,6 @@ def totalgametimeallfriends(steamid):
         for j in d:
             totalegametime[j['name']] += j['time']
     return totalegametime
-
 def meestgespeeldegames(steamid):
     gametime = totalgametimeallfriends(steamid)
     maximaal = sorted(gametime, key=gametime.get, reverse=True)[:5]
@@ -141,7 +146,6 @@ def meestgespeeldegamestijd(steamid):
     return dict
 
 
-print(meestgespeeldegames('76561199040375838'))
 
 def steamdata():
 
@@ -155,7 +159,8 @@ def steamdata():
 def steamreviews():
     bestand = open('steam.json')
     data = json.load(bestand)
-    dictreviews = {}
+    dictreviews = {
+                   }
     for i in data:
         if i['positive_ratings'] + i['negative_ratings'] > 3000:
             positief = i['positive_ratings']
@@ -164,7 +169,10 @@ def steamreviews():
             positiefprocent = round(positiefprocent, 2)
             teupdaten = {i['name']: positiefprocent}
             dictreviews.update(teupdaten)
-    return dict(sorted(dictreviews.items(), key=lambda item: item[1], reverse=True)[:5])
+    res = dict(sorted(dictreviews.items(), key=itemgetter(1), reverse=True)[:5])
+    res2 = list(res.items())
+    return res2
+
 
 def sorteerdavgspeeltijd():
     lst = []
@@ -218,12 +226,13 @@ def zelfdespellengui(steamid, friendid):
         text.insert(END, i +'\n')
     text.tag_add("center", "1.0", "end")
 
-#76561198147947505
-#76561199040375838
 
 
 def maindashboard():
     root = tkinter.Toplevel()
+    data = steamreviews()
+    new = (', '.join(f"({', '.join(str(x) for x in item)})" for item in data))
+    print(new)
     root.attributes('-fullscreen',True)
     root.maxsize=('1200x1000')
     root.title('Dashboard')
@@ -259,12 +268,23 @@ def maindashboard():
     label3.grid(row=2, column=1, pady=5)
     label4 = Label(scherm, text=sorteerdmediaanspeeltijd(), bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
     label4.grid(row=2, column=2, pady=5)
+    text = Text(root, bg='#1b2838')
+    text.tag_configure("center", justify='center')
+    text.grid(row=3, column=1)
+    for i in data:
+        text.insert(END, i + '\n')
+    text.tag_add("center", "1.0", "end")
     root.mainloop()
+
+#76561198147947505
+#76561199040375838
 
 def optie1dashboard():
     steamid = steamidentry.get()
     data1 = meestgespeeldegamestijd(steamid)
+    data2 = ownedgamesallfriends(steamid)
     df1 = pd.DataFrame(data1)
+    df2 = pd.DataFrame(data2)
     root = tkinter.Toplevel()
     root.attributes('-fullscreen', True)
     root.maxsize = ('1200x1000')
@@ -280,7 +300,7 @@ def optie1dashboard():
     scherm = Frame(root, width=1200, height=800, bg='#171a21')
     scherm.grid(row=2, column=0, pady=5)
     hoofdmenu = Label(master=dashboard, image=converted_image, width=1200, height=100, bg='#1b2838')
-    hoofdmenu.grid(row=0, column=0)
+    hoofdmenu.grid(row=0, column=10)
     optie1 = Button(menubar, text='Home', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
                     command=lambda: [root.destroy(), maindashboard()])
     optie1.grid(row=1, column=0, pady=5)
@@ -300,10 +320,24 @@ def optie1dashboard():
     bar1.get_tk_widget().pack(side=tkinter.LEFT, fill=tkinter.BOTH)
     df1 = df1[['game', 'time']].groupby('game').sum()
     df1.plot(kind='bar', legend=True, ax=ax1)
-    ax1.set_title('Vrienden speeltijd')
-    ax1.set_title(f'Speeltijd van vrienden van {playername(steamid)}')
+    ax1.set_title('Vrienden speeltijd', color='#c7d5e0')
+    ax1.set_title(f'Speeltijd vrienden van {playername(steamid)}', color='#c7d5e0')
     ax1.patch.set_facecolor('#1b2838')
-    root.mainloop()
+    ax1.tick_params(axis='x', colors='#c7d5e0')
+    ax1.tick_params(axis='y', colors='#c7d5e0')
+
+    figure2 = plt.Figure(figsize=(5, 8))
+    figure2.patch.set_facecolor('#1b2838')
+    ax2 = figure2.add_subplot(211)
+    bar2 = FigureCanvasTkAgg(figure2, scherm)
+    bar2.get_tk_widget().pack(side=tkinter.RIGHT, fill=tkinter.BOTH)
+    df2 = df2[['aantal', 'game']].groupby('aantal').sum().astype(float)
+    df2.plot(kind='bar', legend=True, ax=ax2)
+    ax2.set_title('Spellen die jouw vrienden hebben.', color='#c7d5e0')
+    ax2.set_title(f'Spellen van vrienden van {playername(steamid)}', color='#c7d5e0')
+    ax2.patch.set_facecolor('#1b2838')
+    ax2.tick_params(axis='x', colors='#c7d5e0')
+    ax2.tick_params(axis='y', colors='#c7d5e0')
 
 def optie2dashboard():
     root = tkinter.Toplevel()
@@ -321,7 +355,7 @@ def optie2dashboard():
     scherm = Frame(root, width=1200, height=800, bg='#1b2838')
     scherm.grid(row=2, column=0, pady=5)
     hoofdmenu = Label(master=dashboard, image=converted_image, width=1200, height=100, bg='#1b2838')
-    hoofdmenu.grid(row=0, column=0)
+    hoofdmenu.grid(row=0, column=10)
     optie1 = Button(menubar, text='Home', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
                     command=lambda: [root.destroy(), maindashboard()])
     optie1.grid(row=1, column=0, pady=5)
