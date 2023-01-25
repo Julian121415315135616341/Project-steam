@@ -28,28 +28,37 @@ def playername(steamid):
 
 def friendlist(steamid):
     lst =[]
-    response = requests.get(f"http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={steamid}&relationship=friend").json()
-    for i in response['friendslist']['friends']:
-        lst.append(i['steamid'])
+    try:
+        response = requests.get(f"http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={steamid}&relationship=friend").json()
+        for i in response['friendslist']['friends']:
+            lst.append(i['steamid'])
+    except:
+        placeholder = True
     return lst
+
 
 def friendsdata(steamid):
     friends = friendlist(steamid)
     for i in friends:
         return(playersummaries(i))
 
-def onlinevrienden(steamid):
-    online = []
-    busy = []
-    offline =[]
-    away = []
-    snooze = []
+def onlinevrienden(steamid, getal):
+    lst = []
+    string = ''
     vriendenlijst = friendlist(steamid)
     for i in vriendenlijst:
         data = playersummaries(i)
-        if data['response']['personastate'] == 0:
-            offline.append(data['response']['personaname'])
-    return offline
+        for j in data['response']['players']:
+            if j['personastate'] == getal:
+                lst.append(j['personaname'])
+            else:
+                continue
+    for i in lst:
+        string += (i)
+        string += '\n'
+
+    return string
+
 
 def gametime(steamid):
     lst = []
@@ -213,7 +222,7 @@ def zelfdespellenowned(steamid, friendid):
     return lst
 def zelfdespellengui(steamid, friendid):
     root2 = tkinter.Tk()
-    root2.maxsize = ('700x350')
+    root2.maxsize = ('800x350')
     root2.title('Games')
     root2.config(background='#1b2838')
     data = zelfdespellenowned(steamid, friendid)
@@ -339,6 +348,12 @@ def optie1dashboard():
     ax2.tick_params(axis='y', colors='#c7d5e0')
 
 def optie2dashboard():
+    steamid = steamidentry.get()
+    online = (onlinevrienden(steamid, 1))
+    busy = (onlinevrienden(steamid, 2))
+    offline = (onlinevrienden(steamid, 0))
+    away = (onlinevrienden(steamid, 3))
+    snooze = (onlinevrienden(steamid, 4))
     root = tkinter.Toplevel()
     root.attributes('-fullscreen', True)
     root.maxsize = ('1200x1000')
@@ -351,8 +366,10 @@ def optie2dashboard():
     dashboard.grid(row=0, column=0, pady=5)
     menubar = Frame(root, width=1200, height=100., bg='#1b2838')
     menubar.grid(row=1, column=0, pady=5)
-    scherm = Frame(root, width=1200, height=800, bg='#1b2838')
+    scherm = Frame(root, width=1200, height=300, bg='#1b2838')
     scherm.grid(row=2, column=0, pady=5)
+    scherm2 = Frame(root, width=1200, height=500, bg='#1b2838')
+    scherm2.grid(row=3, column=0)
     hoofdmenu = Label(master=dashboard, image=converted_image, width=1200, height=100, bg='#1b2838')
     hoofdmenu.grid(row=0, column=10)
     optie1 = Button(menubar, text='Home', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
@@ -374,6 +391,31 @@ def optie2dashboard():
     button = Button(scherm, text='Zie spellen die jullie beide hebben', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18),
                     command=lambda: [zelfdespellengui(steamidentry.get(), steamidentryvriend.get())])
     button.grid(row=4, column=2)
+
+    onlinelabel = Label(scherm2, text='Online vrienden: ', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+    onlinelabel.grid(row=5, column=0,padx=20)
+    onlinelabel2 = Label(scherm2, text=online,bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 11),width=20)
+    onlinelabel2.grid(row=6, column=0,sticky=N)
+
+    offlinelabel = Label(scherm2, text='Offline vrienden: ', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+    offlinelabel.grid(row=5, column=1, padx=20)
+    offlinelabel2 = Label(scherm2, text=offline, bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 11), width=20)
+    offlinelabel2.grid(row=6, column=1,sticky=N)
+
+    busylabel = Label(scherm2, text='Busy vrienden: ', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+    busylabel.grid(row=5, column=2, padx=20)
+    busylabel2 = Label(scherm2, text=busy, bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 11))
+    busylabel2.grid(row=6, column=2,sticky=N)
+
+    snoozelabel = Label(scherm2, text='Snooze vrienden: ', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+    snoozelabel.grid(row=5, column=3,padx=20)
+    snoozelabel2 = Label(scherm2, text=snooze, bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 11))
+    snoozelabel2.grid(row=6, column=3,sticky=N)
+
+    awaylabel = Label(scherm2, text='Away vrienden: ', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
+    awaylabel.grid(row=5, column=4,padx=20)
+    awaylabel2 = Label(scherm2, text=away, bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 11))
+    awaylabel2.grid(row=6, column=4,sticky=N)
     root.mainloop()
 
 
