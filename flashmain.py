@@ -28,7 +28,7 @@ with serial.Serial(port=pico_port, baudrate=115200, bytesize=8, parity='N', stop
 
     try:
         # Request user input
-        commands = ['optie 1', 'optie 2', 'optie 3']
+        commands = ['optie 1', 'optie 2', 'optie 3', 'exit']
         while True:
             choice = input("Command? [" + ", ".join(commands) + "] ")
 
@@ -50,10 +50,15 @@ with serial.Serial(port=pico_port, baudrate=115200, bytesize=8, parity='N', stop
                 data = "2\r"
                 serial_port.write(data.encode())
                 pico_output = read_serial(serial_port)
-                pico_output = pico_output.replace('\r\n', '')
+                pico_output = pico_output.replace('\r\n', ' ')
                 print("[pico] " + pico_output)
             elif choice == 'exit':
                 # Exit user input loop
+                data = "3\r"
+                serial_port.write(data.encode())
+                pico_output = read_serial(serial_port)
+                pico_output = pico_output.replace('\r\n', ' ')
+                print("[pico] " + pico_output)
                 break
             else:
                 print("[WARN] Unknown command.")
