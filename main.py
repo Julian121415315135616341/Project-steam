@@ -55,12 +55,12 @@ def exitPico():
 # port vinden waarmee pico pi is aangesloten
 serial_ports = list_ports.comports()
 
-print("[INFO] Serial ports gevonden:")
-for i, port in enumerate(serial_ports):
-    print(str(i) + ". " + str(port.device))
+# print("[INFO] Serial ports gevonden:")
+# for i, port in enumerate(serial_ports):
+#     print(str(i) + ". " + str(port.device))
 
-pico_port_index = int(input("Aan welke port is de Raspberry Pi Pico aan verbonden? "))
-pico_port = serial_ports[pico_port_index].device
+# pico_port_index = int(input("Aan welke port is de Raspberry Pi Pico aan verbonden? "))
+pico_port = serial_ports[0].device
 
 startPico()
 
