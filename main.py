@@ -10,7 +10,59 @@ from tkinter import *
 import PIL.Image
 import PIL.ImageTk
 
+from serial.tools import list_ports
+import serial
 
+def read_serial(port):
+    """data lezen van serial port en terugsturen als string."""
+    line = port.read(1000)
+    return line.decode()
+
+def startPico():
+    with serial.Serial(port=pico_port, baudrate=115200, bytesize=8, parity='N', stopbits=1, timeout=1) as serial_port:
+        if serial_port.isOpen():
+            print("[INFO] Using serial port", serial_port.name)
+        else:
+            print("[INFO] Opening serial port", serial_port.name, "...")
+            serial_port.open()
+
+        # onderste 2 lampjes neopixel kleuren geel
+        data = "4\r"
+        serial_port.write(data.encode())
+        pico_output = read_serial(serial_port)
+        pico_output = pico_output.replace('\r\n', ' ')
+        print("[PICO] " + pico_output)
+
+        serial_port.close()
+
+def exitPico():
+    with serial.Serial(port=pico_port, baudrate=115200, bytesize=8, parity='N', stopbits=1, timeout=1) as serial_port:
+        if serial_port.isOpen():
+            print("[INFO] Using serial port", serial_port.name)
+        else:
+            print("[INFO] Opening serial port", serial_port.name, "...")
+            serial_port.open()
+
+        # onderste 2 lampjes neopixel kleuren geel
+        data = "3\r"
+        serial_port.write(data.encode())
+        pico_output = read_serial(serial_port)
+        pico_output = pico_output.replace('\r\n', ' ')
+        print("[PICO] " + pico_output)
+
+        serial_port.close()
+
+# port vinden waarmee pico pi is aangesloten
+serial_ports = list_ports.comports()
+
+print("[INFO] Serial ports gevonden:")
+for i, port in enumerate(serial_ports):
+    print(str(i) + ". " + str(port.device))
+
+pico_port_index = int(input("Aan welke port is de Raspberry Pi Pico aan verbonden? "))
+pico_port = serial_ports[pico_port_index].device
+
+startPico()
 
 
 '''steamid voor test: 76561199040375838'''
@@ -265,7 +317,7 @@ def maindashboard():
                     command=lambda: [root.destroy(), optie2dashboard()])
     optie3.grid(row=1, column=2, pady=5)
     stoppen = Button(menubar, text='Stoppen', bg='#171a21', fg ='#c7d5e0', font=('Times New Roman', 24), width=21,
-                    command=lambda: [root.destroy()])
+                    command=lambda: [root.destroy(), exitPico()])
     stoppen.grid(row=1, column=3, pady=5)
     test1 = Label(scherm, text='Hoofdscherm', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
     test1.grid(row=2, column=0, pady=5)
@@ -282,6 +334,24 @@ def maindashboard():
         Label5 = Label(scherm, text =i, bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
         Label5.grid(row=x, column=1)
         x+=1
+
+    # Open a connection to the Pico
+    with serial.Serial(port=pico_port, baudrate=115200, bytesize=8, parity='N', stopbits=1, timeout=1) as serial_port:
+        if serial_port.isOpen():
+            print("[INFO] Using serial port", serial_port.name)
+        else:
+            print("[INFO] Opening serial port", serial_port.name, "...")
+            serial_port.open()
+
+        # onderste 2 lampjes neopixel kleuren geel
+        data = "0\r"
+        serial_port.write(data.encode())
+        pico_output = read_serial(serial_port)
+        pico_output = pico_output.replace('\r\n', ' ')
+        print("[PICO] " + pico_output)
+
+        serial_port.close()
+
     root.mainloop()
 ##76561198347428691
 #76561198147947505
@@ -319,7 +389,7 @@ def optie1dashboard():
                     command=lambda: [root.destroy(), optie2dashboard()])
     optie3.grid(row=1, column=2, pady=5)
     stoppen = Button(menubar, text='Stoppen', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
-                     command=lambda: [root.destroy()])
+                     command=lambda: [root.destroy(), exitPico()])
     stoppen.grid(row=1, column=3, pady=5)
     figure1 = plt.Figure(figsize=(5, 8))
     figure1.patch.set_facecolor('#1b2838')
@@ -346,6 +416,23 @@ def optie1dashboard():
     ax2.patch.set_facecolor('#1b2838')
     ax2.tick_params(axis='x', colors='#c7d5e0')
     ax2.tick_params(axis='y', colors='#c7d5e0')
+
+    # Open a connection to the Pico
+    with serial.Serial(port=pico_port, baudrate=115200, bytesize=8, parity='N', stopbits=1, timeout=1) as serial_port:
+        if serial_port.isOpen():
+            print("[INFO] Using serial port", serial_port.name)
+        else:
+            print("[INFO] Opening serial port", serial_port.name, "...")
+            serial_port.open()
+
+        # 2 lampjes neopixel kleuren groen
+        data = "1\r"
+        serial_port.write(data.encode())
+        pico_output = read_serial(serial_port)
+        pico_output = pico_output.replace('\r\n', ' ')
+        print("[PICO] " + pico_output)
+
+        serial_port.close()
 
 def optie2dashboard():
     steamid = steamidentry.get()
@@ -382,7 +469,7 @@ def optie2dashboard():
                     command=lambda: [root.destroy(), optie2dashboard()])
     optie3.grid(row=1, column=2, pady=5)
     stoppen = Button(menubar, text='Stoppen', bg='#171a21', fg='#c7d5e0', font=('Times New Roman', 24), width=21,
-                     command=lambda: [root.destroy()])
+                     command=lambda: [root.destroy(), exitPico()])
     stoppen.grid(row=1, column=3, pady=5)
     label1 = Label(scherm, text='Steamid vriend:', bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 18))
     label1.grid(row=3, column=1)
@@ -416,6 +503,24 @@ def optie2dashboard():
     awaylabel.grid(row=5, column=4,padx=20)
     awaylabel2 = Label(scherm2, text=away, bg='#1b2838', fg='#c7d5e0', font=('Times New Roman', 11))
     awaylabel2.grid(row=6, column=4,sticky=N)
+
+    # Open a connection to the Pico
+    with serial.Serial(port=pico_port, baudrate=115200, bytesize=8, parity='N', stopbits=1, timeout=1) as serial_port:
+        if serial_port.isOpen():
+            print("[INFO] Using serial port", serial_port.name)
+        else:
+            print("[INFO] Opening serial port", serial_port.name, "...")
+            serial_port.open()
+
+        # onderste 2 lampjes neopixel kleuren geel
+        data = "2\r"
+        serial_port.write(data.encode())
+        pico_output = read_serial(serial_port)
+        pico_output = pico_output.replace('\r\n', ' ')
+        print("[PICO] " + pico_output)
+
+        serial_port.close()
+
     root.mainloop()
 
 
