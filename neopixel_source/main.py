@@ -5,7 +5,7 @@ import neopixel
 
 def blink(n, s, color):
     """
-    Knipper alle lichtjes van de neopixel.
+    Knipper de lichtjes 'n' keer in kleur 'color', met interval van 's' seconden.
     :param n: Het aantal keer dat het licht moet knipperen. (int)
     :param s: De tijd tussen het knipperen (interval) in seconden. (float)
     :param color: De kleur van het knipperende licht. (tuple)
@@ -28,7 +28,7 @@ def blink(n, s, color):
 
 def startup():
     """
-    Lichtpatroon voor het opstarten van het programma.
+    Groen lichtpatroon voor het opstarten van het programma.
     """
     # Zet de lichtjes een voor een aan, van onder naar boven.
     for i in range(8):
@@ -47,7 +47,7 @@ def startup():
 
 def shutdown():
     """
-    Lichtpatroon voor het afsluiten van het programma.
+    Rood lichtpatroon voor het afsluiten van het programma.
     """
     # Knipper 2 keer
     blink(2, 0.2, red)
