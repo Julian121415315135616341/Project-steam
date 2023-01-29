@@ -82,29 +82,33 @@ while True:
     data = input()
     print("Received '" + data + "'.")
 
-    # Home
+    # Home scherm is actief
     if data == '0':
         blink(2, 0.2, yellow)
+        np.fill(yellow)
+        np.write()
         time.sleep(1)
 
-    # Statistieken
+    # Statistieken scherm is actief
     elif data == '1':
         blink(2, 0.2, orange)
+        np.fill(orange)
         np.write()
         time.sleep(1)
 
-    # Vrienden
+    # Vrienden scherm is actief
     elif data == '2':
         blink(2, 0.2, blue)
+        np.fill(blue)
         np.write()
         time.sleep(1)
 
-    # Afsluiten
+    # Programma wordt afgesloten
     elif data == '3':
         shutdown()
         time.sleep(1)
 
-    # Opstarten
+    # Programma wordt opgestart
     elif data == '4':
         startup()
         time.sleep(1)
