@@ -7,18 +7,22 @@ def blink(n, s, color):
     """
     Knipper alle lichtjes van de neopixel.
     :param n: Het aantal keer dat het licht moet knipperen. (int)
-    :param s: De tijd in seconden tussen het knipperen. (float)
+    :param s: De tijd tussen het knipperen (interval) in seconden. (float)
     :param color: De kleur van het knipperende licht. (tuple)
     """
     for _ in range(n):
+        # Zet de lichtjes aan
         np.fill(color)
         np.write()
 
+        # Wacht het interval
         time.sleep(s)
 
+        # Zet de lichtjes uit
         np.fill((0, 0, 0))
         np.write()
 
+        # Wacht het interval
         time.sleep(s)
 
 
