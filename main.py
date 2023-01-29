@@ -68,18 +68,26 @@ startPico()
 '''steamid voor test: 76561199040375838'''
 
 def playersummaries(friendid):
+    """Vraag de playersummary van steamid op
+    return de response"""
     response = requests.get(f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamids={friendid}").json()
     return response
 
 def playername(steamid):
+    """"haal de spelersnaam uit de response en voeg toe aan lijst
+        return de lijst"""
     lst = []
+    #voor elk element in response, voeg personaname toe aan lijst
     response = requests.get(f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamids={steamid}").json()
     for i in response['response']['players']:
         lst.append(i['personaname'])
     return lst[0]
 
 def friendlist(steamid):
+    """"Vraag naar vriendenlijst van steamid op api
+    voeg de steamid's van vrienden toe aan lijst"""
     lst =[]
+    #Voeg alle vrienden van het steamid toe aan lijst.
     try:
         response = requests.get(f"http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={steamid}&relationship=friend").json()
         for i in response['friendslist']['friends']:
@@ -90,14 +98,21 @@ def friendlist(steamid):
 
 
 def friendsdata(steamid):
+    '''voor elke vriend van steamid, pas functie playersummaries op hun steamid toe.'''
     friends = friendlist(steamid)
+    #voer functie playersummaries uit op elk steamid in friends.
     for i in friends:
         return(playersummaries(i))
 
 def onlinevrienden(steamid, getal):
+    '''bepaal de vrienden van steamid
+        kijk of de status van steamid overeenkomt met getal
+        zoja voeg toe aan lijst
+        return lijst en maak een string van de lijst voor gui toevoeging'''
     lst = []
     string = ''
     vriendenlijst = friendlist(steamid)
+    #voor elk steamid kijk of de personastate overeenkomt met getal parameter.
     for i in vriendenlijst:
         data = playersummaries(i)
         for j in data['response']['players']:
@@ -105,6 +120,7 @@ def onlinevrienden(steamid, getal):
                 lst.append(j['personaname'])
             else:
                 continue
+    #voor elke element in de lijst, voeg deze toe aan de string.
     for i in lst:
         string += (i)
         string += '\n'
@@ -113,7 +129,10 @@ def onlinevrienden(steamid, getal):
 
 
 def gametime(steamid):
+    '''haal alle gespeelde games van steamid op en de tijd
+        voeg deze toe aan een dict en voeg de dict toe aan de lijst.'''
     lst = []
+    #voor elke element in response, voeg de naam en tijd toe aan de dict en voeg dict toe aan lijst.
     response = requests.get(f'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={steamid}&format=json&include_appinfo=1').json()
     for i in response['response']['games']:
         naam = i['name']
@@ -125,15 +144,23 @@ def gametime(steamid):
         lst.append(dict)
     return lst
 def ownedgames(steamid):
+    '''verkrijg de games die steamid op zijn account heeft staan en voeg toe aan lijst'''
     lst = []
+    #voor elk element in response voeg de naam toe aan lijst.
     response = requests.get(f'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=89538EE3D15588D519ABB27D0E9FAAC1&steamid={steamid}&format=json&include_appinfo=1').json()
     for i in response['response']['games']:
         lst.append(i['name'])
     return lst
 
 def ownedgamesallfriends(steamid):
+    '''voor elke vriend in vriendenlijst,
+        voer ownedgames functie uit en voeg toe aan lijst
+        verkrijg vervolgens de frequentie van alle spellen met een dictionary
+        sorteer de dictionary
+        verander de makeup van de dict om goed te kunnen gebruiken in matplotlib.'''
     lst = []
     friends = friendlist(steamid)
+    #voor elke steamid in friends voer de functie owner games uit en voeg toe aan de lijst
     for i in friends:
         try:
             games = ownedgames(i)
@@ -141,20 +168,26 @@ def ownedgamesallfriends(steamid):
                 lst.append(x)
         except:
             continue
+    #maak dict freqs aan
     freqs = {}
     for i in lst:
+        #als i in freqs zit, verander de frequentie met +1
         if i in freqs:
             freqs[i] += 1
+        #zoniet voeg de key i toe met frequentie 1
         else:
             freqs[i] = 1
     try:
+        #ik heb een hekel aan de rainbow six siege test server en wil die er niet tussen hebben staan
         del freqs["Tom Clancy's Rainbow Six Siege - Test Server"]
     except:
-        gay = True
-
+        #de except is nodig, verder is deze regel nutteloos
+        placeholder = True
+    #sorteer de dictionary op de frequentie van keys
     res = dict(sorted(freqs.items(), key=itemgetter(1), reverse=True)[:5])
     lstname = []
     lstamount = []
+    #verander de opmaak van de dictionary om 2 keys met alle waardes erin te hebben.
     for i in res.keys():
         lstname.append(i)
     for y in res.values():
@@ -171,25 +204,40 @@ def ownedgamesallfriends(steamid):
 
 
 def totalgametimeallfriends(steamid):
+    '''vraag vriendenlijst op
+        voer gametime functie uit op elk element in vriendenlijst
+        vang error op met een except keyerror
+        voeg de naam en speeltijd toe aan een dict'''
     totaalgametime = []
     friends = friendlist(steamid)
+    #voor elk steamid in friends probeer functie gametime uit te voeren, als er een keyerror is negeer deze en continue
     for x in friends:
         try:
             data = gametime(x)
             totaalgametime.append(data)
         except KeyError:
             continue
+    #om de dictionary goed te sorteren gebruik Counter
     totalegametime = Counter()
+    #voeg elke dict uit totaalgametime toe aan totalegametime
     for d in totaalgametime:
         for j in d:
             totalegametime[j['name']] += j['time']
     return totalegametime
 def meestgespeeldegames(steamid):
+    '''vraag de totalegametime van alle vrienden op
+    sorteer deze en pak de 5 grootste waardes'''
     gametime = totalgametimeallfriends(steamid)
+    #sorteer gametime en pak de 5 grootste waardes
     maximaal = sorted(gametime, key=gametime.get, reverse=True)[:5]
     return maximaal
 
 def meestgespeeldegamestijd(steamid):
+    '''vraag de meestgespeelde games van steamid op
+        vraag de totalegametime van alle vrienden van steamid op
+        pak de tijd / 60 van meestgespeeldegames en voeg deze toe aan de lijst
+        maak nieuwe dict aan en voeg hier de tijd en naam van het spel toe.
+        '''
     games = meestgespeeldegames(steamid)
     lst =[]
     dict = {
@@ -197,11 +245,15 @@ def meestgespeeldegamestijd(steamid):
         'time': []
     }
     data = totalgametimeallfriends(steamid)
+    #voor elke element in meestgespeeldegames(steamid)
+    #tijd is data(i) / 60, voeg deze tijd toe aan de lijst
     for i in meestgespeeldegames(steamid):
         tijd = data[i]
         lst.append(tijd / 60)
+    #voor elke element in de lijst voeg deze toe aan dict key 'tijd'
     for i in lst:
         dict['time'].append(i)
+    #voor elke element in games voeg deze toe aan dict key 'game'
     for x in games:
         dict['game'].append(x)
     return dict
@@ -209,19 +261,31 @@ def meestgespeeldegamestijd(steamid):
 
 
 def steamdata():
-
+    '''laad json bestand
+        pak de namen van alle spellen erin
+        return de eerste 5'''
     lst = []
     bestand = open('steam.json')
     data = json.load(bestand)
-    for i in data:
-        lst.append(i['name'])
+    #voor elke game in data, voeg de naam van het spel toe aan de lijst
+    for game in data:
+        lst.append(game['name'])
     return 'Eerste 5 spellen' + '\n' + lst[0] + '\n' + lst[1] + '\n' + lst[2] + '\n' + lst[3] + '\n' + lst[4]
 
 def steamreviews():
+    '''laad het json bestand
+        kijk of de totale reviews van een spel meer zijn dan 3000
+        als dit zo is bereken het % positieve reviews
+        en voeg de game en % positieve reviews toe aan de dict.
+        sorteer de dictionary en maak er een lijst van'''
     bestand = open('steam.json')
     data = json.load(bestand)
     dictreviews = {
                    }
+    #voor elk element in data
+    #check of de negatieve + positieve reviews meer zijn dan 300
+    #dit doen we om te zorgen dan willekeurige spellen met 2 reviews in totaal niet meetellen
+    #als er meer dan 3000 reviews zijn berekent % positieve reviews en voeg dit en de naam van het spel toe aan dict
     for i in data:
         if i['positive_ratings'] + i['negative_ratings'] > 3000:
             positief = i['positive_ratings']
@@ -230,44 +294,68 @@ def steamreviews():
             positiefprocent = round(positiefprocent, 2)
             teupdaten = {i['name']: positiefprocent}
             dictreviews.update(teupdaten)
+    #sorteer de dictionary op de waardes en maak er een lijst van
     res = dict(sorted(dictreviews.items(), key=itemgetter(1), reverse=True)[:5])
     res2 = list(res.items())
     return res2
 
 
 def sorteerdavgspeeltijd():
+    '''laad het json bestand
+        sorteer de data op de gemiddelde speeltijd en pak de hoogste 6 waardes,
+        voeg de namen hiervan toe aan de lijst'''
     lst = []
     bestand = open('steam.json')
     data = json.load(bestand)
+    #sorteer de data op de key 'average_playtime' en doe dit reversed (hoogste waardes eerst)
     data = sorted(data, key=lambda i: i['average_playtime'], reverse=True)
+    #pak de hoogste 6 waardes
     data = (data[0:6])
+    #voor elke element in data voeg de naam toe aan lijst
     for i in data:
         lst.append(i['name'])
     return '5 Spellen met hoogste gemiddelde speeltijd' '\n'+ '1: '+lst[0] + '\n' + '2: '+lst[1 ] + '\n' + '3: '+lst[2] + '\n' + '4: '+lst[3] +'\n' + '5: '+lst[4]
 
 def sorteerdmediaanspeeltijd():
+    '''laad het jsonbestand
+        sorteer de data op mediaan van speeltijd en neem de hoogste waardes,
+        voeg de namen hiervan toe aan lijst
+        '''
     lst = []
     bestand = open('steam.json')
     data = json.load(bestand)
+    #sorteer de data op de key 'median_playtime' en doe dit reversed (hoogste waardes eerst)
     data = sorted(data, key=lambda i: i['median_playtime'], reverse=True)
+    #pak de hoogste 6 waardes
     data = (data[0:6])
+    #voor elk element in data voeg de naam toe aan lijst
     for i in data:
         lst.append(i['name'])
     return 'Spellen met hoogste mediaan speeltijd' '\n'+ '1: '+lst[0] + '\n' + '2: '+lst[1 ] + '\n' + '3: '+lst[2] + '\n' + '4: '+lst[3] +'\n' + '5: '+lst[4]
 def duurstespellen():
+    '''laad het jsonbestand
+        sorteer de data op de prijs en neem de hoogste waardes,
+        voeg de namen hiervan toe aan lijst
+        '''
     lst = []
     bestand = open('steam.json')
     data = json.load(bestand)
+    #sorteer de data op de key 'price' en doe dit reversed (hoogste waardes eerst)
     data = sorted(data, key=lambda i: i['price'], reverse=True)
+    #pak hoogste 6 waardes
     data = (data[0:6])
+    #voor elk element in data voeg de naam toe aan lijst
     for i in data:
         lst.append(i['name'])
     return 'Duurste Spellen' '\n'+ '1: '+lst[0] + '\n' + '2: '+lst[1 ] + '\n' + '3: '+lst[2] + '\n' + '4: '+lst[3] +'\n' + '5: '+lst[4]
 
 def zelfdespellenowned(steamid, friendid):
+    '''neem de games die steamid heeft, en de spellen die friendid heeft
+        vergelijk deze en voeg alleen overeenkomende waardes toe aan nieuwe lijst'''
     lst =[]
     mijngames = ownedgames(steamid)
     vriendgames = ownedgames(friendid)
+    #voor elk element in mijngames, als deze ook on vriendgames zit, voeg dan toe aan lijst
     for x in mijngames:
         if x in vriendgames:
             lst.append(x)
