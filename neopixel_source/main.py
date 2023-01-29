@@ -2,93 +2,107 @@ import time
 import machine
 import neopixel
 
+
+def blink(n, s, color):
+    """
+    Knipper alle lichtjes van de neopixel.
+    :param n: Het aantal keer dat het licht moet knipperen. (int)
+    :param s: De tijd in seconden tussen het knipperen. (float)
+    :param color: De kleur van het knipperende licht. (tuple)
+    """
+    for _ in range(n):
+        np.fill(color)
+        np.write()
+
+        time.sleep(s)
+
+        np.fill((0, 0, 0))
+        np.write()
+
+        time.sleep(s)
+
+
+def startup():
+    """
+    Lichtpatroon voor het opstarten van het programma.
+    """
+    # Zet de lichtjes een voor een aan, van onder naar boven.
+    for i in range(8):
+        np[i] = green
+        np.write()
+        time.sleep(0.1)
+
+    # Zet de lichtjes uit
+    np.fill((0, 0, 0))
+    np.write()
+    time.sleep(0.2)
+
+    # Knipper 2 keer
+    blink(2, 0.2, green)
+
+
+def shutdown():
+    """
+    Lichtpatroon voor het afsluiten van het programma.
+    """
+    # Knipper 2 keer
+    blink(2, 0.2, red)
+
+    # Zet de lichtjes aan
+    np.fill(red)
+    np.write()
+    time.sleep(0.2)
+
+    # Zet de lichtjes een voor een uit, van boven naar onder.
+    for i in reversed(range(8)):
+        np[i] = (0, 0, 0)
+        np.write()
+        time.sleep(0.1)
+
+
+# Definieer de neopixel
 np = neopixel.NeoPixel(machine.Pin(13), 8)
 
-# wachten voor data.
+# Definieer kleuren
+red = (255, 0, 0)
+green = (0, 255, 0)
+blue = (0, 0, 255)
+yellow = (255, 255, 0)
+orange = (255, 165, 0)
+
+
+# Main loop
 while True:
 
+    # Input ontvangen
     data = input()
-
     print("Received '" + data + "'.")
 
+    # Home
     if data == '0':
-        np[0] = (255, 255, 0)
-        np[1] = (255, 255, 0)
-        np[2] = (0, 0, 0)
-        np[3] = (0, 0, 0)
-        np[4] = (0, 0, 0)
-        np[5] = (0, 0, 0)
-        np[6] = (0, 0, 0)
-        np[7] = (0, 0, 0)
-        np.write()
+        blink(2, 0.2, yellow)
         time.sleep(1)
+
+    # Statistieken
     elif data == '1':
-        np[0] = (0, 0, 0)
-        np[1] = (0, 0, 0)
-        np[2] = (0, 255, 0)
-        np[3] = (0, 255, 0)
-        np[4] = (0, 0, 0)
-        np[5] = (0, 0, 0)
-        np[6] = (0, 0, 0)
-        np[7] = (0, 0, 0)
+        blink(2, 0.2, orange)
         np.write()
         time.sleep(1)
+
+    # Vrienden
     elif data == '2':
-        np[0] = (0, 0, 0)
-        np[1] = (0, 0, 0)
-        np[2] = (0, 0, 0)
-        np[3] = (0, 0, 0)
-        np[4] = (0, 0, 255)
-        np[5] = (0, 0, 255)
-        np[6] = (0, 0, 0)
-        np[7] = (0, 0, 0)
+        blink(2, 0.2, blue)
         np.write()
         time.sleep(1)
+
+    # Afsluiten
     elif data == '3':
-        # EXIT optie, rood knipperen alle lampjes
-        for _ in range(0, 4):
-            np[0] = (255, 0, 0)
-            np[1] = (255, 0, 0)
-            np[2] = (255, 0, 0)
-            np[3] = (255, 0, 0)
-            np[4] = (255, 0, 0)
-            np[5] = (255, 0, 0)
-            np[6] = (255, 0, 0)
-            np[7] = (255, 0, 0)
-            np.write()
-            time.sleep(0.2)
-            np[0] = (0, 0, 0)
-            np[1] = (0, 0, 0)
-            np[2] = (0, 0, 0)
-            np[3] = (0, 0, 0)
-            np[4] = (0, 0, 0)
-            np[5] = (0, 0, 0)
-            np[6] = (0, 0, 0)
-            np[7] = (0, 0, 0)
-            np.write()
-            time.sleep(0.2)
+        shutdown()
+        time.sleep(1)
+
+    # Opstarten
     elif data == '4':
-        # Opstarten, groen knipperen alle lampjes
-        for _ in range(0, 4):
-            np[0] = (0, 255, 0)
-            np[1] = (0, 255, 0)
-            np[2] = (0, 255, 0)
-            np[3] = (0, 255, 0)
-            np[4] = (0, 255, 0)
-            np[5] = (0, 255, 0)
-            np[6] = (0, 255, 0)
-            np[7] = (0, 255, 0)
-            np.write()
-            time.sleep(0.2)
-            np[0] = (0, 0, 0)
-            np[1] = (0, 0, 0)
-            np[2] = (0, 0, 0)
-            np[3] = (0, 0, 0)
-            np[4] = (0, 0, 0)
-            np[5] = (0, 0, 0)
-            np[6] = (0, 0, 0)
-            np[7] = (0, 0, 0)
-            np.write()
-            time.sleep(0.2)
+        startup()
+        time.sleep(1)
 
     time.sleep(1)
