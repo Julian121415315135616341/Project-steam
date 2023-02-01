@@ -646,7 +646,7 @@ label1 = Label(root, text='Steamid:', bg='#1b2838',fg ='#c7d5e0',  font=('Times 
 label1.pack()
 steamidentry = Entry(root, bg='White',fg ='#c7d5e0',  font=('Times New Roman', 18))
 steamidentry.pack()
-button = Button(root, text='Zie statestieken',bg='#1b2838',fg ='#c7d5e0',  font=('Times New Roman', 18), command=lambda: [root.iconify(), idcheck(steamidentry.get())])
+button = Button(root, text='Zie statistieken',bg='#1b2838',fg ='#c7d5e0',  font=('Times New Roman', 18), command=lambda: [root.iconify(), idcheck(steamidentry.get())])
 button.pack()
 root.mainloop()
 
